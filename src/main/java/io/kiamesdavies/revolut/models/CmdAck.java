@@ -9,7 +9,7 @@ public class CmdAck {
         this.event = event;
     }
 
-    public static CmdAck from(Cmd cmd, Evt evt){
+    public static CmdAck from(Cmd.BaseAccountCmd cmd, Evt evt) {
         return new CmdAck(cmd.deliveryId, evt);
     }
 

@@ -1,7 +1,7 @@
 
-DROP TABLE IF EXISTS PUBLIC."journal";
+DROP TABLE IF EXISTS "journal";
 
-CREATE TABLE IF NOT EXISTS PUBLIC."journal" (
+CREATE TABLE IF NOT EXISTS "journal" (
                                                 "ordering" BIGINT AUTO_INCREMENT,
                                                 "persistence_id" VARCHAR(255) NOT NULL,
                                                 "sequence_number" BIGINT NOT NULL,
@@ -11,11 +11,11 @@ CREATE TABLE IF NOT EXISTS PUBLIC."journal" (
                                                 PRIMARY KEY("persistence_id", "sequence_number")
 );
 
-CREATE UNIQUE INDEX "journal_ordering_idx" ON PUBLIC."journal"("ordering");
+CREATE UNIQUE INDEX "journal_ordering_idx" ON "journal"("ordering");
 
-DROP TABLE IF EXISTS PUBLIC."snapshot";
+DROP TABLE IF EXISTS "snapshot";
 
-CREATE TABLE IF NOT EXISTS PUBLIC."snapshot" (
+CREATE TABLE IF NOT EXISTS "snapshot" (
                                                  "persistence_id" VARCHAR(255) NOT NULL,
                                                  "sequence_number" BIGINT NOT NULL,
                                                  "created" BIGINT NOT NULL,

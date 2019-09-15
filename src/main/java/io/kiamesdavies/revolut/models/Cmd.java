@@ -9,28 +9,47 @@ import java.math.BigDecimal;
 public abstract class Cmd implements Serializable {
     static final long serialVersionUID = 42L;
 
-    public final  String deliveryId;
-    public final String bankAccountId;
-    public final BigDecimal amount;
+    public static abstract class BaseAccountCmd extends Cmd {
+        public final String deliveryId;
+        public final String transactionId;
+        public final String bankAccountId;
+        public final BigDecimal amount;
 
-    protected Cmd(String deliveryId, String bankAccountId, BigDecimal amount) {
-        this.deliveryId = deliveryId;
-        this.amount = amount;
-        this.bankAccountId = bankAccountId;
-    }
-
-
-    public  static  class  DepositCmd extends  Cmd{
-
-        public DepositCmd(String deliveryId,String bankAccountId, BigDecimal amount){
-            super(deliveryId,bankAccountId,amount);
+        BaseAccountCmd(String deliveryId, String transactionId, String bankAccountId, BigDecimal amount) {
+            this.deliveryId = deliveryId;
+            this.transactionId = transactionId;
+            this.amount = amount;
+            this.bankAccountId = bankAccountId;
         }
     }
 
-    public  static  class  WithdrawCmd extends  Cmd{
+    public final static class DepositCmd extends BaseAccountCmd {
 
-        public WithdrawCmd(String deliveryId,String bankAccountId, BigDecimal amount){
-            super(deliveryId,bankAccountId,amount);
+        public DepositCmd(String deliveryId, String transactionId, String bankAccountId, BigDecimal amount) {
+            super(deliveryId, transactionId, bankAccountId, amount);
+        }
+    }
+
+    public final static class WithdrawCmd extends BaseAccountCmd {
+
+        public WithdrawCmd(String deliveryId, String transactionId, String bankAccountId, BigDecimal amount) {
+            super(deliveryId, transactionId, bankAccountId, amount);
+        }
+    }
+
+    public final static class TransferCmd extends Cmd {
+        public final BigDecimal amount;
+        public final String remarks;
+        public final String source;
+        public final String accountToId;
+        public final String accountFromId;
+
+        public TransferCmd(String accountFromId, String accountToId, BigDecimal amount, String remarks, String source) {
+            this.amount = amount;
+            this.remarks = remarks;
+            this.source = source;
+            this.accountToId = accountToId;
+            this.accountFromId = accountFromId;
         }
     }
 
