@@ -4,10 +4,19 @@ package io.kiamesdavies.revolut.account;
 import akka.actor.ActorRef;
 import akka.actor.ActorSystem;
 import akka.testkit.javadsl.TestKit;
+import io.kiamesdavies.revolut.models.*;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+
+import java.math.BigDecimal;
+import java.util.Map;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 
 /**
@@ -16,67 +25,99 @@ import static org.hamcrest.Matchers.*;
 public class AccountTest
 
 {
-    ActorSystem system;
-    ActorRef bank;
-    ActorRef sampleBankAccount;
-    private static final String bankACCOUNTId = "12345";
+    static ActorSystem  system;
+    static ActorRef bank;
+    static ActorRef sampleBankAccount;
+    private static final String bankAccountId = "2";
 
-    final TestKit testProbe = new TestKit(system);
+    static TestKit testProbe;
 
     @Test
     public void shouldWithdrawMoneyIfBalanceIsGreaterThanAmount()
     {
-        double amount = 10;
+        BigDecimal amount = new BigDecimal(10);
 
 
-        sampleBankAccount.tell(new GetBalance(), ActorRef.noSender());
+        sampleBankAccount.tell(new Query(bankAccountId), testProbe.getRef());
         AccountBalance accountBalance = testProbe.expectMsgClass(AccountBalance.class);
-        sampleBankAccount.tell(new Withdraw(amount), ActorRef.noSender());
-        MoneyWithdrawn moneyWithdrawn = testProbe.expectMsgClass(MoneyWithdrawn.class);
-        assertThat(moneyWithdrawn.balance,  equalTo(accountBalance.balance-10));
+        sampleBankAccount.tell(new Cmd.WithdrawCmd(java.util.UUID.randomUUID().toString(), bankAccountId, amount), testProbe.getRef());
+        CmdAck cmdAck = testProbe.expectMsgClass(CmdAck.class);
+        assertThat(cmdAck.event, instanceOf(Evt.WithdrawEvent.class));
+        sampleBankAccount.tell(new Query(bankAccountId), testProbe.getRef());
+        AccountBalance newAccountBalance = testProbe.expectMsgClass(AccountBalance.class);
+        assertThat(newAccountBalance.getBalance(),  equalTo(accountBalance.getBalance().subtract(amount)));
     }
 
 
     @Test
     public void shouldFailToWithdrawMoneyIfBalanceIsLessThanAmount(){
-        sampleBankAccount.tell(new GetBalance(), ActorRef.noSender());
+
+
+        sampleBankAccount.tell(new Query(bankAccountId), testProbe.getRef());
         AccountBalance accountBalance = testProbe.expectMsgClass(AccountBalance.class);
-        sampleBankAccount.tell(new Withdraw(accountBalance.balance + 10), ActorRef.noSender());
-        testProbe.expectMsgClass(FailedToWithdraw.class);
+        sampleBankAccount.tell(new Cmd.WithdrawCmd(java.util.UUID.randomUUID().toString(), bankAccountId, accountBalance.getBalance().add(BigDecimal.ONE)), testProbe.getRef());
+        CmdAck cmdAck = testProbe.expectMsgClass(CmdAck.class);
+        assertThat(cmdAck.event, instanceOf(Evt.FailedEvent.class));
+        assertThat(((Evt.FailedEvent)cmdAck.event).type, equalTo(Evt.FailedEvent.Type.INSUFFICIENT_FUNDS));
     }
 
     @Test
     public void shouldCreditBalanceIfAmountIsGreaterThanZero(){
-        double amount = 10;
-        sampleBankAccount.tell(new GetBalance(), ActorRef.noSender());
+        BigDecimal amount = new BigDecimal(10);
+        sampleBankAccount.tell(new Query(bankAccountId), testProbe.getRef());
         AccountBalance accountBalance = testProbe.expectMsgClass(AccountBalance.class);
-        sampleBankAccount.tell(new Deposit(amount), ActorRef.noSender());
+        sampleBankAccount.tell(new Cmd.DepositCmd(java.util.UUID.randomUUID().toString(), bankAccountId,amount), testProbe.getRef());
+        CmdAck cmdAck = testProbe.expectMsgClass(CmdAck.class);
+        assertThat(cmdAck.event, instanceOf(Evt.DepositEvent.class));
+        sampleBankAccount.tell(new Query(bankAccountId), testProbe.getRef());
         AccountBalance newAccountBalance = testProbe.expectMsgClass(AccountBalance.class);
-        assertThat(newAccountBalance.balance,  equalTo(accountBalance.balance+10));
+        assertThat(newAccountBalance.getBalance(),  equalTo(accountBalance.getBalance().add(amount)));
     }
 
     @Test
     public void shouldFailToCreditBalanceIfAmountIsLessThanOne(){
-        sampleBankAccount.tell(new Deposit(0), ActorRef.noSender());
-        testProbe.expectMsgClass(FailedToDeposit.class);
+        sampleBankAccount.tell(new Cmd.DepositCmd(java.util.UUID.randomUUID().toString(), bankAccountId,BigDecimal.ZERO), testProbe.getRef());
+        CmdAck cmdAck = testProbe.expectMsgClass(CmdAck.class);
+        assertThat(cmdAck.event, instanceOf(Evt.FailedEvent.class));
+        assertThat(((Evt.FailedEvent)cmdAck.event).type, equalTo(Evt.FailedEvent.Type.INVALID_AMOUNT));
     }
 
     @Test
     public void shouldReturnAccountGivenACorrectAccountId(){
-        final TestKit testProbe = new TestKit(system);
 
-        bank.tell(new GetBankAccount(bankACCOUNTId), ActorRef.noSender());
+        bank.tell(new Query(bankAccountId), testProbe.getRef());
 
-        BankAccountResponse bankAccountResponse = testProbe.expectMsgClass(BankAccountResponse.class);
-        assertNotNull(bankAccountResponse.balance);
-        assertThat(bankAccountResponse.account, equalTo(bankACCOUNTId));
+        Query.BankAccount bankAccount = testProbe.expectMsgClass(Query.BankAccount.class);
+        assertNotNull(bankAccount.bankAccount);
+        assertThat(bankAccount.bankAccountId, equalTo(bankAccountId));
     }
 
     @Test
     public void shouldFailToReturnAccountGivenWrongAccountId(){
-        final TestKit testProbe = new TestKit(system);
-        bank.tell(new GetBankAccount("wrongBankId"), ActorRef.noSender());
-        testProbe.expectMsgClass(BankNotFound.class);
 
+        bank.tell(new Query("wrongBankId"), testProbe.getRef());
+        testProbe.expectMsgClass(Query.QueryAckNotFound.class);
+
+    }
+
+
+
+    @BeforeAll
+    public static void setup() {
+        system = ActorSystem.create();
+        testProbe = new TestKit(system);
+        Map<String, ActorRef> bankAccounts = IntStream.range(1, 6).mapToObj(String::valueOf).collect(Collectors.toMap(f -> f, f ->
+                system.actorOf(BankAccount.props(f), String.format("supervisor-%s", f))));
+        bank = system.actorOf(Bank.props(bankAccounts),"bank");
+
+        sampleBankAccount = bankAccounts.get(bankAccountId);
+
+
+    }
+
+    @AfterAll
+    public static void teardown() {
+        TestKit.shutdownActorSystem(system);
+        system = null;
     }
 }

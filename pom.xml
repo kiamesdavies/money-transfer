@@ -54,6 +54,13 @@
     </dependency>
 
     <dependency>
+      <groupId>com.github.dnvriend</groupId>
+      <artifactId>akka-persistence-inmemory_${scala.version}</artifactId>
+      <version>2.5.15.2</version>
+      <scope>test</scope>
+    </dependency>
+
+    <dependency>
       <groupId>com.typesafe.akka</groupId>
       <artifactId>akka-http_${scala.version}</artifactId>
       <version>10.1.9</version>
