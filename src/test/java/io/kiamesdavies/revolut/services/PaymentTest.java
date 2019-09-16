@@ -120,9 +120,23 @@ public class PaymentTest {
         assertThat(newAccountBalance2.getBalance(),equalTo(accountBalance2.getBalance()));
     }
 
+    @Test
+    void shouldRollbackIfCreditIsMisbehaving() throws InterruptedException {
+        MoneyTransfer transfer = new MoneyTransfer(BigDecimal.TEN);
+
+        AccountBalance accountBalance1 = payment.getBalance("3").toCompletableFuture().join();
+        CompletionStage<TransactionResult> response = payment.transferMoney("3","10",transfer);
+        TransactionResult result = response.toCompletableFuture().join();
+        assertThat(result, instanceOf(TransactionResult.Success.class));
+        //so that rollback can take place
+        Thread.sleep(5000);
+        AccountBalance newAccountBalance1 = payment.getBalance("3").toCompletableFuture().join();
+        assertThat(newAccountBalance1.getBalance(),equalTo(accountBalance1.getBalance()));
+    }
+
 
     @BeforeAll
-    static void setup() {
+    static void setup() throws InterruptedException {
         instance = Bootstrap.getInstance();
         payment = instance.payment;
     }

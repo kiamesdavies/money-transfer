@@ -38,7 +38,8 @@ public class DefaultPayment implements Payment {
     @Override
     public CompletionStage<TransactionResult> transferMoney(String accountFromId, String accountToId, MoneyTransfer moneyTransfer) {
 
-        ActorRef transferHandler = actorSystem.actorOf(TransferHandler.props(UUID.randomUUID().toString(), bank));
+        String transactionId = UUID.randomUUID().toString();
+        ActorRef transferHandler = actorSystem.actorOf(TransferHandler.props(transactionId, bank), String.format("transaction-%s",transactionId));
         return Patterns.ask(transferHandler, new Cmd.TransferCmd(accountFromId, accountToId, moneyTransfer.getAmount(), moneyTransfer.getRemarks(), moneyTransfer.getSource()), Duration.ofSeconds(60)).exceptionally(ex -> {
             log.error("Failed to transfer", ex);
             return new TransactionResult.Failure(ex);

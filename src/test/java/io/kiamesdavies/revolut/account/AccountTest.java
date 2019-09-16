@@ -41,6 +41,7 @@ public class AccountTest
         sampleBankAccount.tell(new Query.Single(UUID.randomUUID().toString(),bankAccountId), testProbe.getRef());
         QueryAck queryAck = testProbe.expectMsgClass(QueryAck.class);
         AccountBalance accountBalance = (AccountBalance) queryAck.response;
+
         sampleBankAccount.tell(new Cmd.WithdrawCmd(UUID.randomUUID().toString(),UUID.randomUUID().toString(), bankAccountId, amount), testProbe.getRef());
         CmdAck cmdAck = testProbe.expectMsgClass(CmdAck.class);
         assertThat(cmdAck.event, instanceOf(Evt.WithdrawEvent.class));
@@ -129,7 +130,7 @@ public class AccountTest
 
 
     @BeforeAll
-    static void setup() {
+    static void setup() throws InterruptedException {
         system = ActorSystem.create();
         testProbe = new TestKit(system);
         Map<String, ActorRef> bankAccounts = Bootstrap.makeBankAccounts(system);

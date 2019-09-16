@@ -51,7 +51,7 @@ public class BankAccount extends AbstractPersistentActorWithTimers {
                 BackoffOpts.onStop(
                         Props.create(BankAccount.class), bankAccountId,
                         FiniteDuration.create(1, TimeUnit.SECONDS),
-                        FiniteDuration.create(30, TimeUnit.SECONDS),
+                        FiniteDuration.create(5, TimeUnit.SECONDS),
                         0.2)
         );
     }
@@ -72,7 +72,7 @@ public class BankAccount extends AbstractPersistentActorWithTimers {
                         f -> sender().tell(CmdAck.from(f, new Evt.FailedEvent(bankAccountId, INVALID_AMOUNT, "Amount is too small")), self()))
                 .match(Cmd.WithdrawCmd.class, s -> s.amount.compareTo(state.getBalance()) > 0,
                         f -> sender().tell(CmdAck.from(f, new Evt.FailedEvent(bankAccountId, INSUFFICIENT_FUNDS)), self()))
-                .match(Cmd.BaseAccountCmd.class, this::handleAccount)
+                .match(Cmd.BaseAccountCmd.class, this::handleCmd)
                 .match(ReceivedCmdCleaUp.class, f -> {
                     receivedCmds = receivedCmds.entrySet().stream()
                             .filter(g -> g.getValue().isAfter(LocalDateTime.now().minusDays(1)))
@@ -100,7 +100,7 @@ public class BankAccount extends AbstractPersistentActorWithTimers {
         log.info("Starting bank account {}", bankAccountId);
     }
 
-    private void handleAccount(Cmd.BaseAccountCmd c) {
+    private void handleCmd(Cmd.BaseAccountCmd c) {
         final Evt.BaseAccountEvt evt = c instanceof Cmd.DepositCmd ? new Evt.DepositEvent((Cmd.DepositCmd) c) : new Evt.WithdrawEvent((Cmd.WithdrawCmd) c);
         if (receivedCmds.containsKey(c.transactionId)) {
             sender().tell(CmdAck.from(c, evt), self());

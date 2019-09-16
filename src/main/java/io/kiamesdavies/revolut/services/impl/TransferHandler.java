@@ -12,7 +12,6 @@ import io.kiamesdavies.revolut.exceptions.AccountNotFoundException;
 import io.kiamesdavies.revolut.exceptions.InsufficientFundsException;
 import io.kiamesdavies.revolut.models.*;
 
-import java.util.Arrays;
 import java.util.Map;
 
 public class TransferHandler extends AbstractPersistentActorWithAtLeastOnceDelivery {
@@ -35,15 +34,16 @@ public class TransferHandler extends AbstractPersistentActorWithAtLeastOnceDeliv
         this.bank = bank;
 
         rollback = receiveBuilder()
-                .match(CmdAck.class, f -> f.event instanceof Evt.DepositEvent, j ->
-                        //save the roll back as another transaction
-                        persistAll(Arrays.asList(state.with(TransactionStatus.ROLLBACK),
-                                new Evt.TransactionEvent(state.getTransactionId() + "-roll", null, state.getAccountFromId(), state.getAmount(), state.getRemarks(), "System", TransactionStatus.ROLLBACK)),
-                                (a) -> {
-                                    confirmDelivery(Long.valueOf(j.deliveryId));
-                                    self().tell(PoisonPill.getInstance(), self());
-                                }
-                        ))
+                .match(CmdAck.class, f -> f.event instanceof Evt.DepositEvent, j ->{
+                    log.info("Rolling back transaction {}",state);
+                    //save the roll back as another transaction
+                    persist(state.with(TransactionStatus.ROLLBACK),
+                            (a) -> {
+                                confirmDelivery(Long.valueOf(j.deliveryId));
+                                self().tell(PoisonPill.getInstance(), self());
+                            }
+                    );
+                })
                 .match(AtLeastOnceDelivery.UnconfirmedWarning.class, j -> {
                     log.error("Rollback to account {} failed to respond after {} trials for {}", accountTo, warnAfterNumberOfUnconfirmedAttempts(), state);
                     persist(state.with(TransactionStatus.ROLLBACK_FAILED), (a) -> {
@@ -60,16 +60,16 @@ public class TransferHandler extends AbstractPersistentActorWithAtLeastOnceDeliv
                     persist(state.with(TransactionStatus.DEPOSIT_FAILED), (a) -> {
                         j.getUnconfirmedDeliveries().forEach(g -> confirmDelivery(g.deliveryId()));
                         getContext().become(rollback);
-                        deliver(accountFrom.path(), deliveryId -> new Cmd.DepositCmd(deliveryId.toString(), transactionId + "-roll", state.getAccountFromId(), state.getAmount()));
+                        deliver(accountFrom.path(), deliveryId -> new Cmd.DepositCmd(deliveryId.toString(), transactionId + "-rollback", state.getAccountFromId(), state.getAmount()));
                     });
                 })
                 .match(CmdAck.class, f -> f.event instanceof Evt.FailedEvent, j -> {
-                    log.error("Failed to deposit {} due to ", state, j.event);
+                    log.error("Failed to deposit {} due to {}", state, j.event);
                     //rollback
                     persist(state.with(TransactionStatus.DEPOSIT_FAILED), (a) -> {
                         confirmDelivery(Long.valueOf(j.deliveryId));
                         getContext().become(rollback);
-                        deliver(accountFrom.path(), deliveryId -> new Cmd.DepositCmd(deliveryId.toString(), transactionId + "-roll", state.getAccountFromId(), state.getAmount()));
+                        deliver(accountFrom.path(), deliveryId -> new Cmd.DepositCmd(deliveryId.toString(), transactionId + "-rollback", state.getAccountFromId(), state.getAmount()));
                     });
 
 
@@ -155,7 +155,7 @@ public class TransferHandler extends AbstractPersistentActorWithAtLeastOnceDeliv
                     Map<String, Query.BankReference> response = (Map<String, Query.BankReference>) f.response;
                     accountFrom = response.get(state.getAccountFromId()).bankAccount;
                     accountTo = response.get(state.getAccountToId()).bankAccount;
-                    if (TransactionStatus.NEW.equals(state.getStatus()) || TransactionStatus.WITHDRAW_FAILED.equals(state.getStatus())) {
+                    if (TransactionStatus.NEW.equals(state.getStatus())) {
                         getContext().become(withdraw);
                         deliver(accountFrom.path(), deliveryId -> new Cmd.WithdrawCmd(deliveryId.toString(), state.getTransactionId(), state.getAccountFromId(), state.getAmount()));
                     } else if (TransactionStatus.WITHDRAWN.equals(state.getStatus())) {
@@ -163,7 +163,7 @@ public class TransferHandler extends AbstractPersistentActorWithAtLeastOnceDeliv
                         deliver(accountTo.path(), deliveryId -> new Cmd.DepositCmd(deliveryId.toString(), state.getTransactionId(), state.getAccountToId(), state.getAmount()));
                     } else if (TransactionStatus.DEPOSIT_FAILED.equals(state.getStatus()) || TransactionStatus.ROLLBACK_FAILED.equals(state.getStatus())) {
                         getContext().become(rollback);
-                        deliver(accountFrom.path(), deliveryId -> new Cmd.DepositCmd(deliveryId.toString(), state.getTransactionId() + "-roll", state.getAccountFromId(), state.getAmount()));
+                        deliver(accountFrom.path(), deliveryId -> new Cmd.DepositCmd(deliveryId.toString(), state.getTransactionId() + "-rollback", state.getAccountFromId(), state.getAmount()));
                     } else {
                         log.warning("A completed transaction {} try to restart, am going to kill myself now", state);
                         self().tell(PoisonPill.getInstance(), self());
@@ -201,7 +201,7 @@ public class TransferHandler extends AbstractPersistentActorWithAtLeastOnceDeliv
                     } else {
                         j.getUnconfirmedDeliveries().forEach(g -> confirmDelivery(g.deliveryId()));
                         if (initiator != null) {
-                            initiator.tell(new TransactionResult.Failure(new IllegalArgumentException("Bank ")), self());
+                            initiator.tell(new TransactionResult.Failure(new IllegalStateException("Bank not responding")), self());
                         }
                         self().tell(PoisonPill.getInstance(), self());
                     }

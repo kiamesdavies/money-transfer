@@ -13,9 +13,11 @@ public abstract class Evt implements Serializable {
     public abstract static class BaseAccountEvt extends Evt {
         private String bankAccountId;
         private BigDecimal amount;
+        private String transactionId;
 
-        BaseAccountEvt(String bankAccountId, BigDecimal amount) {
+        BaseAccountEvt(String bankAccountId,String transactionId, BigDecimal amount) {
             this.setBankAccountId(bankAccountId);
+            this.transactionId = transactionId;
             this.setAmount(amount);
         }
 
@@ -46,13 +48,14 @@ public abstract class Evt implements Serializable {
             super();
         }
 
-        public DepositEvent(String bankAccountId, BigDecimal amount) {
+        public DepositEvent(String bankAccountId,String transactionId, BigDecimal amount) {
 
-            super(bankAccountId, amount);
+            super(bankAccountId,transactionId, amount);
         }
 
         public DepositEvent(Cmd.DepositCmd depositCmd) {
-            this(depositCmd.bankAccountId, depositCmd.amount);
+            //a transaction id with rollback shows that it was intended for rollback and simply replaced
+            this(depositCmd.bankAccountId, depositCmd.transactionId.replace("-rollback",""), depositCmd.amount);
         }
     }
 
@@ -62,13 +65,14 @@ public abstract class Evt implements Serializable {
             super();
         }
 
-        public WithdrawEvent(String bankAccountId, BigDecimal amount) {
+        public WithdrawEvent(String bankAccountId,String transactionId, BigDecimal amount) {
 
-            super(bankAccountId, amount);
+            super(bankAccountId,transactionId, amount);
         }
 
         public WithdrawEvent(Cmd.WithdrawCmd withdrawCmd) {
-            this(withdrawCmd.bankAccountId, withdrawCmd.amount);
+            //a transaction id with rollback shows that it was intended for rollback and simply replaced
+            this(withdrawCmd.bankAccountId, withdrawCmd.transactionId.replace("-rollback",""), withdrawCmd.amount);
         }
     }
 
