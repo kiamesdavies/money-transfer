@@ -34,8 +34,8 @@ public class TransferHandler extends AbstractPersistentActorWithAtLeastOnceDeliv
         this.bank = bank;
 
         rollback = receiveBuilder()
-                .match(CmdAck.class, f -> f.event instanceof Evt.DepositEvent, j ->{
-                    log.info("Rolling back transaction {}",state);
+                .match(CmdAck.class, f -> f.event instanceof Evt.DepositEvent, j -> {
+                    log.info("Rolling back transaction {}", state);
                     //save the roll back as another transaction
                     persist(state.with(TransactionStatus.ROLLBACK),
                             (a) -> {

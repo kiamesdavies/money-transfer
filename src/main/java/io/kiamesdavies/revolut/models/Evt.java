@@ -15,7 +15,7 @@ public abstract class Evt implements Serializable {
         private BigDecimal amount;
         private String transactionId;
 
-        BaseAccountEvt(String bankAccountId,String transactionId, BigDecimal amount) {
+        BaseAccountEvt(String bankAccountId, String transactionId, BigDecimal amount) {
             this.setBankAccountId(bankAccountId);
             this.transactionId = transactionId;
             this.setAmount(amount);
@@ -45,17 +45,17 @@ public abstract class Evt implements Serializable {
     public final static class DepositEvent extends BaseAccountEvt {
 
         DepositEvent() {
-            
+
         }
 
-        public DepositEvent(String bankAccountId,String transactionId, BigDecimal amount) {
+        public DepositEvent(String bankAccountId, String transactionId, BigDecimal amount) {
 
-            super(bankAccountId,transactionId, amount);
+            super(bankAccountId, transactionId, amount);
         }
 
         public DepositEvent(Cmd.DepositCmd depositCmd) {
             //a transaction id with rollback shows that it was intended for rollback and simply replaced
-            this(depositCmd.bankAccountId, depositCmd.transactionId.replace("-rollback",""), depositCmd.amount);
+            this(depositCmd.bankAccountId, depositCmd.transactionId.replace("-rollback", ""), depositCmd.amount);
         }
     }
 
@@ -65,14 +65,14 @@ public abstract class Evt implements Serializable {
 
         }
 
-        public WithdrawEvent(String bankAccountId,String transactionId, BigDecimal amount) {
+        public WithdrawEvent(String bankAccountId, String transactionId, BigDecimal amount) {
 
-            super(bankAccountId,transactionId, amount);
+            super(bankAccountId, transactionId, amount);
         }
 
         public WithdrawEvent(Cmd.WithdrawCmd withdrawCmd) {
             //a transaction id with rollback shows that it was intended for rollback and simply replaced
-            this(withdrawCmd.bankAccountId, withdrawCmd.transactionId.replace("-rollback",""), withdrawCmd.amount);
+            this(withdrawCmd.bankAccountId, withdrawCmd.transactionId.replace("-rollback", ""), withdrawCmd.amount);
         }
     }
 

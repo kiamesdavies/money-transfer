@@ -1,12 +1,15 @@
 package io.kiamesdavies.revolut.services;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import io.kiamesdavies.revolut.controllers.AccountController;
 import io.kiamesdavies.revolut.models.AccountBalance;
 import io.kiamesdavies.revolut.models.MoneyTransfer;
 import io.kiamesdavies.revolut.models.TransactionResult;
 
 import java.util.concurrent.CompletionStage;
 
-public interface Payment {
+public interface Account {
 
     /**
      * Transfer money between two accounts
@@ -26,5 +29,6 @@ public interface Payment {
      * @return Returns the account balance or a completion exception
      */
     CompletionStage<AccountBalance> getBalance(String bankAccountId);
+
 
 }

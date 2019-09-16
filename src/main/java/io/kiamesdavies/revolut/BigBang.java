@@ -11,7 +11,8 @@ import java.util.concurrent.ExecutionException;
 public class BigBang extends HttpApp {
 
     private final Bootstrap instance;
-    public BigBang(){
+
+    public BigBang() {
         instance = Bootstrap.getInstance();
     }
 

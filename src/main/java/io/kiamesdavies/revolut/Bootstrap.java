@@ -8,9 +8,9 @@ import akka.stream.ActorMaterializer;
 import io.kiamesdavies.revolut.account.BadBankAccount;
 import io.kiamesdavies.revolut.account.Bank;
 import io.kiamesdavies.revolut.account.BankAccount;
-import io.kiamesdavies.revolut.controllers.PaymentController;
-import io.kiamesdavies.revolut.services.Payment;
-import io.kiamesdavies.revolut.services.impl.DefaultPayment;
+import io.kiamesdavies.revolut.controllers.AccountController;
+import io.kiamesdavies.revolut.services.Account;
+import io.kiamesdavies.revolut.services.impl.DefaultAccount;
 import scala.concurrent.Future;
 
 import java.util.Map;
@@ -20,7 +20,7 @@ import java.util.stream.IntStream;
 public class Bootstrap {
 
     private static Bootstrap ourInstance;
-    public final Payment payment;
+    public final Account account;
     public final ActorRef bank;
     public final ActorSystem actorSystem;
     public final ActorMaterializer materializer;
@@ -31,14 +31,15 @@ public class Bootstrap {
         actorSystem = ActorSystem.create("system");
 
         bank = actorSystem.actorOf(Bank.props(makeBankAccounts(actorSystem)), "bank");
-        payment = new DefaultPayment(actorSystem, bank);
+        account = new DefaultAccount(actorSystem, bank);
         materializer = ActorMaterializer.create(actorSystem);
-        route = new PaymentController(payment).createRoute();
+        route = new AccountController(actorSystem, account).createRoute();
 
     }
 
     /**
      * Set up five bankAccounts with ids 1, 2, 3, 4, 5 and 10 as a bad one
+     *
      * @param actorSystem
      * @return
      */
@@ -47,7 +48,7 @@ public class Bootstrap {
                 actorSystem.actorOf(BankAccount.props(f), String.format("supervisor-for-%s", f))));
 
         //create a bad bank account to demonstrate rollback
-        bankAccounts.put("10", actorSystem.actorOf(BadBankAccount.props(),"bad-account"));
+        bankAccounts.put("10", actorSystem.actorOf(BadBankAccount.props(), "bad-account"));
 
         return bankAccounts;
     }
@@ -59,7 +60,7 @@ public class Bootstrap {
         return ourInstance;
     }
 
-    public  Future<Terminated> terminate(){
+    public Future<Terminated> terminate() {
         ourInstance = null;
         materializer.shutdown();
         return actorSystem.terminate();
