@@ -25,6 +25,6 @@ public class PaymentController  extends AllDirectives {
         return concat(
                 path("hello", () ->
                         get(() ->
-                                completeWithFuture(payment.transferMoney("1","2", new MoneyTransfer(BigDecimal.valueOf(10000))), marshaller))));
+                                complete("hello"))));
     }
 }

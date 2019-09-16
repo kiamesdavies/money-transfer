@@ -55,7 +55,7 @@ public class TransferHandler extends AbstractPersistentActorWithAtLeastOnceDeliv
                 .build();
         deposit = receiveBuilder()
                 .match(AtLeastOnceDelivery.UnconfirmedWarning.class, j -> {
-                    log.error("Deposit account {} failed to respond after {} trials for {}", accountTo, warnAfterNumberOfUnconfirmedAttempts(), state);
+                    log.error("Deposit account {} failed to respond after {} trials for {} will attempt rollback", accountTo, warnAfterNumberOfUnconfirmedAttempts(), state);
                     //rollback
                     persist(state.with(TransactionStatus.DEPOSIT_FAILED), (a) -> {
                         j.getUnconfirmedDeliveries().forEach(g -> confirmDelivery(g.deliveryId()));
@@ -64,11 +64,12 @@ public class TransferHandler extends AbstractPersistentActorWithAtLeastOnceDeliv
                     });
                 })
                 .match(CmdAck.class, f -> f.event instanceof Evt.FailedEvent, j -> {
-                    log.error("Failed to deposit {} due to {}", state, j.event);
+                    log.error("Failed to deposit {} due to {} will attempt rollback", state, j.event);
                     //rollback
                     persist(state.with(TransactionStatus.DEPOSIT_FAILED), (a) -> {
                         confirmDelivery(Long.valueOf(j.deliveryId));
                         getContext().become(rollback);
+                        //a '-rollback' has to be added to the transaction id because its already marked as received by the bank account
                         deliver(accountFrom.path(), deliveryId -> new Cmd.DepositCmd(deliveryId.toString(), transactionId + "-rollback", state.getAccountFromId(), state.getAmount()));
                     });
 
@@ -143,7 +144,7 @@ public class TransferHandler extends AbstractPersistentActorWithAtLeastOnceDeliv
                 .match(Cmd.TransferCmd.class, h -> {
                     initiator = sender();
                     if (h.accountFromId.equalsIgnoreCase(h.accountToId)) {
-                        initiator.tell(new TransactionResult.Failure(new IllegalArgumentException("You can transfer to same account")), self());
+                        initiator.tell(new TransactionResult.Failure(new IllegalArgumentException("Can't transfer to same account")), self());
                         self().tell(PoisonPill.getInstance(), self());
                     } else {
                         persist(new Evt.TransactionEvent(transactionId, h, TransactionStatus.NEW), (Evt.TransactionEvent a) -> handleEvent(a));

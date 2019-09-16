@@ -1,24 +1,19 @@
 package io.kiamesdavies.revolut;
 
-import akka.NotUsed;
 import akka.actor.ActorRef;
 import akka.actor.ActorSystem;
-import akka.http.javadsl.ConnectHttp;
-import akka.http.javadsl.Http;
-import akka.http.javadsl.ServerBinding;
-import akka.http.javadsl.model.HttpRequest;
-import akka.http.javadsl.model.HttpResponse;
+import akka.actor.Terminated;
+import akka.http.javadsl.server.Route;
 import akka.stream.ActorMaterializer;
-import akka.stream.javadsl.Flow;
 import io.kiamesdavies.revolut.account.BadBankAccount;
 import io.kiamesdavies.revolut.account.Bank;
 import io.kiamesdavies.revolut.account.BankAccount;
 import io.kiamesdavies.revolut.controllers.PaymentController;
 import io.kiamesdavies.revolut.services.Payment;
 import io.kiamesdavies.revolut.services.impl.DefaultPayment;
+import scala.concurrent.Future;
 
 import java.util.Map;
-import java.util.concurrent.CompletionStage;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -28,28 +23,17 @@ public class Bootstrap {
     public final Payment payment;
     public final ActorRef bank;
     public final ActorSystem actorSystem;
-    public final CompletionStage<ServerBinding> binding;
+    public final ActorMaterializer materializer;
+    public final Route route;
 
 
     private Bootstrap() {
         actorSystem = ActorSystem.create("system");
 
-
-        Map<String, ActorRef> bankAccounts = makeBankAccounts(actorSystem);
-
-        bank = actorSystem.actorOf(Bank.props(bankAccounts), "bank");
+        bank = actorSystem.actorOf(Bank.props(makeBankAccounts(actorSystem)), "bank");
         payment = new DefaultPayment(actorSystem, bank);
-
-
-        ActorMaterializer materializer = ActorMaterializer.create(actorSystem);
-
-        //In order to access all directives we need an instance where the routes are define.
-        PaymentController app = new PaymentController(payment);
-        final Flow<HttpRequest, HttpResponse, NotUsed> routeFlow = app.createRoute().flow(actorSystem, materializer);
-        binding = Http.get(actorSystem).bindAndHandle(routeFlow,
-                ConnectHttp.toHost("localhost", 8080), materializer);
-
-        System.out.println("Server online at http://localhost:8080/\nPress RETURN to stop...");
+        materializer = ActorMaterializer.create(actorSystem);
+        route = new PaymentController(payment).createRoute();
 
     }
 
@@ -73,5 +57,11 @@ public class Bootstrap {
             ourInstance = new Bootstrap();
         }
         return ourInstance;
+    }
+
+    public  Future<Terminated> terminate(){
+        ourInstance = null;
+        materializer.shutdown();
+        return actorSystem.terminate();
     }
 }

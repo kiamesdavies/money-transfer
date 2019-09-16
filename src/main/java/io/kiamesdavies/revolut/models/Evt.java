@@ -45,7 +45,7 @@ public abstract class Evt implements Serializable {
     public final static class DepositEvent extends BaseAccountEvt {
 
         DepositEvent() {
-            super();
+            
         }
 
         public DepositEvent(String bankAccountId,String transactionId, BigDecimal amount) {
@@ -62,7 +62,7 @@ public abstract class Evt implements Serializable {
     public final static class WithdrawEvent extends BaseAccountEvt {
 
         WithdrawEvent() {
-            super();
+
         }
 
         public WithdrawEvent(String bankAccountId,String transactionId, BigDecimal amount) {

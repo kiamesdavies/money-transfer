@@ -37,7 +37,7 @@ public class BankAccount extends AbstractPersistentActorWithTimers {
     public BankAccount() {
         this.bankAccountId = self().path().name();
         state = new AccountBalance(bankAccountId, BigDecimal.valueOf(10000));
-        timers().startPeriodicTimer(new ReceivedCmdCleaUp(), new ReceivedCmdCleaUp(), Duration.ofDays(1));
+        timers().startPeriodicTimer(new ReceivedCmdCleanUp(), new ReceivedCmdCleanUp(), Duration.ofHours(6));
     }
 
     /**
@@ -73,9 +73,10 @@ public class BankAccount extends AbstractPersistentActorWithTimers {
                 .match(Cmd.WithdrawCmd.class, s -> s.amount.compareTo(state.getBalance()) > 0,
                         f -> sender().tell(CmdAck.from(f, new Evt.FailedEvent(bankAccountId, INSUFFICIENT_FUNDS)), self()))
                 .match(Cmd.BaseAccountCmd.class, this::handleCmd)
-                .match(ReceivedCmdCleaUp.class, f -> {
+                .match(ReceivedCmdCleanUp.class, f -> {
+                    //the map was re-created to reset the bucket size instead of removing
                     receivedCmds = receivedCmds.entrySet().stream()
-                            .filter(g -> g.getValue().isAfter(LocalDateTime.now().minusDays(1)))
+                            .filter(g -> g.getValue().isAfter(LocalDateTime.now().minusHours(6)))
                             .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
                 })
                 .matchAny(f -> log.error("Unattended Message {}", f))
@@ -117,6 +118,6 @@ public class BankAccount extends AbstractPersistentActorWithTimers {
         }
     }
 
-    private static class ReceivedCmdCleaUp {
+    private static class ReceivedCmdCleanUp {
     }
 }

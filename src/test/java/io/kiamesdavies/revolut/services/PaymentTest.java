@@ -121,7 +121,7 @@ public class PaymentTest {
     }
 
     @Test
-    void shouldRollbackIfCreditIsMisbehaving() throws InterruptedException {
+    void shouldRollbackIfCanNotDeposit() throws InterruptedException {
         MoneyTransfer transfer = new MoneyTransfer(BigDecimal.TEN);
 
         AccountBalance accountBalance1 = payment.getBalance("3").toCompletableFuture().join();
@@ -136,13 +136,14 @@ public class PaymentTest {
 
 
     @BeforeAll
-    static void setup() throws InterruptedException {
+    static void setup() {
         instance = Bootstrap.getInstance();
         payment = instance.payment;
     }
 
     @AfterAll
     static void teardown() {
+        instance.terminate();
         TestKit.shutdownActorSystem(instance.actorSystem);
     }
 }
