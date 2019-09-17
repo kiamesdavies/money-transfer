@@ -2,9 +2,7 @@ package io.kiamesdavies.revolut.controllers;
 
 import akka.actor.ActorSystem;
 import akka.http.javadsl.model.ContentTypes;
-import akka.http.javadsl.model.HttpEntity;
 import akka.http.javadsl.model.HttpRequest;
-import akka.http.javadsl.model.RequestEntity;
 import akka.http.javadsl.testkit.JUnitRouteTest;
 import akka.http.javadsl.testkit.TestRoute;
 import akka.stream.ActorMaterializer;

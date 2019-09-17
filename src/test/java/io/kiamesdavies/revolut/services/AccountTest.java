@@ -141,7 +141,7 @@ public class AccountTest {
         TransactionResult result = response.toCompletableFuture().join();
         assertThat(result, instanceOf(TransactionResult.Success.class));
         //so that rollback can take place
-        Thread.sleep(5000);
+        Thread.sleep(10000);
         AccountBalance newAccountBalance1 = account.getBalance("3").toCompletableFuture().join();
         assertThat(newAccountBalance1.getBalance(), equalTo(accountBalance1.getBalance()));
     }

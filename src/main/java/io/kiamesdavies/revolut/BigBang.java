@@ -18,7 +18,8 @@ public class BigBang extends HttpApp {
 
     public static void main(String[] args) throws ExecutionException, InterruptedException {
         BigBang bigBang = new BigBang();
-        bigBang.startServer("0.0.0.0", 8080, bigBang.instance.actorSystem);
+
+        bigBang.startServer("0.0.0.0", 9099, bigBang.instance.actorSystem);
     }
 
 

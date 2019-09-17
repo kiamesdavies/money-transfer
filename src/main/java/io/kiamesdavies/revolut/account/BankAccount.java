@@ -74,7 +74,7 @@ public class BankAccount extends AbstractPersistentActorWithTimers {
                         f -> sender().tell(CmdAck.from(f, new Evt.FailedEvent(bankAccountId, INSUFFICIENT_FUNDS)), self()))
                 .match(Cmd.BaseAccountCmd.class, this::handleCmd)
                 .match(ReceivedCmdCleanUp.class, f -> {
-                    //the map was re-created to reset the bucket size instead of removing
+                    //the map was re-created to reset the bucket size instead of just removing the entries
                     receivedCmds = receivedCmds.entrySet().stream()
                             .filter(g -> g.getValue().isAfter(LocalDateTime.now().minusHours(6)))
                             .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));

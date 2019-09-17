@@ -2,19 +2,21 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="2f313e3f-0b7d-4528-9d28-8a5e79172007" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/io/kiamesdavies/revolut/commons/Utility.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/integration_tests/AccountService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/integration_tests/CombinedTestSuiteIT.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/integration_tests/ConfirmTransferBalance.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/integration_tests/MultipleTransferLoad.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/resources/load_tests/confirm_account_balance.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/io/kiamesdavies/revolut/BigBang.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/io/kiamesdavies/revolut/BigBang.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/io/kiamesdavies/revolut/Bootstrap.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/io/kiamesdavies/revolut/Bootstrap.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/io/kiamesdavies/revolut/account/BadBankAccount.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/io/kiamesdavies/revolut/account/BadBankAccount.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/io/kiamesdavies/revolut/controllers/PaymentController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/io/kiamesdavies/revolut/controllers/AccountController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/io/kiamesdavies/revolut/models/Evt.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/io/kiamesdavies/revolut/models/Evt.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/io/kiamesdavies/revolut/services/Payment.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/io/kiamesdavies/revolut/services/Account.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/io/kiamesdavies/revolut/services/impl/DefaultPayment.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/io/kiamesdavies/revolut/services/impl/DefaultAccount.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/io/kiamesdavies/revolut/services/impl/TransferHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/io/kiamesdavies/revolut/services/impl/TransferHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/io/kiamesdavies/revolut/account/AccountTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/io/kiamesdavies/revolut/account/AccountTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/io/kiamesdavies/revolut/controllers/PaymentControllerTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/io/kiamesdavies/revolut/controllers/AccountControllerTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/io/kiamesdavies/revolut/services/PaymentTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/io/kiamesdavies/revolut/services/AccountTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/io/kiamesdavies/revolut/account/BankAccount.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/io/kiamesdavies/revolut/account/BankAccount.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/io/kiamesdavies/revolut/commons/Utility.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/io/kiamesdavies/revolut/commons/Utility.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/io/kiamesdavies/revolut/services/Account.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/io/kiamesdavies/revolut/services/Account.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/application.conf" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application.conf" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/commons.conf" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/commons.conf" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/io/kiamesdavies/revolut/controllers/AccountControllerTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/io/kiamesdavies/revolut/controllers/AccountControllerTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/io/kiamesdavies/revolut/services/AccountTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/io/kiamesdavies/revolut/services/AccountTest.java" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <ignored path="$PROJECT_DIR$/target/" />
@@ -74,10 +76,63 @@
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/io/kiamesdavies/revolut/controllers/AccountController.java">
+        <entry file="file://$PROJECT_DIR$/src/test/java/integration_tests/CombinedTestSuiteIT.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="370">
-              <caret line="46" column="44" selection-start-line="46" selection-start-column="37" selection-end-line="46" selection-end-column="44" />
+            <state relative-caret-position="165">
+              <caret line="11" column="32" selection-start-line="11" selection-start-column="13" selection-end-line="11" selection-end-column="32" />
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/io/kiamesdavies/revolut/account/BadBankAccount.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="60">
+              <caret line="5" column="13" selection-start-line="5" selection-start-column="13" selection-end-line="5" selection-end-column="13" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/io/kiamesdavies/revolut/account/Bank.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="315">
+              <caret line="36" column="32" selection-start-line="36" selection-start-column="19" selection-end-line="36" selection-end-column="32" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/resources/commons.conf">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="345">
+              <caret line="23" column="20" selection-start-line="23" selection-start-column="14" selection-end-line="23" selection-end-column="20" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/resources/logback.xml">
+          <provider selected="true" editor-type-id="text-editor" />
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/resources/application.conf">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="135">
+              <caret line="9" column="85" selection-start-line="9" selection-start-column="85" selection-end-line="9" selection-end-column="85" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/io/kiamesdavies/revolut/Bootstrap.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-42">
+              <caret line="19" column="24" lean-forward="true" selection-start-line="19" selection-start-column="24" selection-end-line="19" selection-end-column="24" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -86,27 +141,28 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/test/java/io/kiamesdavies/revolut/controllers/AccountControllerTest.java">
+        <entry file="file://$PROJECT_DIR$/src/test/resources/server_host.properties">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="323">
-              <caret line="43" column="38" selection-start-line="43" selection-start-column="38" selection-end-line="43" selection-end-column="38" />
-              <folding>
-                <element signature="imports" expanded="true" />
-                <element signature="e#3602#3603#0" expanded="true" />
-                <element signature="e#3667#3668#0" expanded="true" />
-              </folding>
+            <state relative-caret-position="45">
+              <caret line="3" lean-forward="true" selection-start-line="3" selection-end-line="4" selection-end-column="78" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/io/kiamesdavies/revolut/services/impl/DefaultAccount.java">
+        <entry file="file://$PROJECT_DIR$/src/main/java/io/kiamesdavies/revolut/account/BankAccount.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="901">
-              <caret line="71" column="150" selection-start-line="71" selection-start-column="150" selection-end-line="71" selection-end-column="150" />
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
+            <state relative-caret-position="248">
+              <caret line="39" column="104" selection-start-line="39" selection-start-column="97" selection-end-line="39" selection-end-column="104" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/test/resources/load_generation.properties">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="90">
+              <caret line="6" selection-start-line="6" selection-end-line="6" />
             </state>
           </provider>
         </entry>
@@ -146,12 +202,15 @@
       <find>tr</find>
       <find>akka-http</find>
       <find>transfer</find>
+      <find>get_initial_account_balance_for_5</find>
+      <find>jun</find>
     </findStrings>
     <replaceStrings>
       <replace>testProbe.getRef</replace>
       <replace>new Query.Single</replace>
       <replace>UUID.randomUUID</replace>
       <replace>void</replace>
+      <replace>$NOT.NULL</replace>
     </replaceStrings>
     <dirStrings>
       <dir>$PROJECT_DIR$</dir>
@@ -163,13 +222,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/src/main/java/io/kiamesdavies/revolut/commons/Serializer.java" />
-        <option value="$PROJECT_DIR$/src/test/java/io/kiamesdavies/revolut/BigBangTest.java" />
-        <option value="$PROJECT_DIR$/src/test/java/io/kiamesdavies/revolut/AccountTest.java" />
-        <option value="$PROJECT_DIR$/src/test/java/io/kiamesdavies/revolut/account/AbstractJavaTest.java" />
-        <option value="$PROJECT_DIR$/src/test/java/io/kiamesdavies/revolut/AbstractJavaTest.java" />
-        <option value="$PROJECT_DIR$/src/main/java/io/kiamesdavies/revolut/models/BankAccountBalance.java" />
-        <option value="$PROJECT_DIR$/src/main/resources/logback.xml" />
         <option value="$PROJECT_DIR$/src/test/java/io/kiamesdavies/revolut/account/PaymentTest.java" />
         <option value="$PROJECT_DIR$/src/test/resources/refrence.conf" />
         <option value="$PROJECT_DIR$/src/main/java/io/kiamesdavies/revolut/models/MoneyTransfer.java" />
@@ -185,20 +237,15 @@
         <option value="$PROJECT_DIR$/src/main/java/io/kiamesdavies/revolut/account/Bank.java" />
         <option value="$PROJECT_DIR$/src/main/java/io/kiamesdavies/revolut/models/AccountBalance.java" />
         <option value="$PROJECT_DIR$/src/main/java/io/kiamesdavies/revolut/models/Cmd.java" />
-        <option value="$PROJECT_DIR$/src/main/resources/commons.conf" />
         <option value="$PROJECT_DIR$/src/main/resources/db/default/v1__DDL_14_09_2019.sql" />
         <option value="$APPLICATION_CONFIG_DIR$/consoles/db/4b47da61-b86a-4f76-98d5-c585e2c47ca8/console.sql" />
-        <option value="$PROJECT_DIR$/src/main/resources/application.conf" />
         <option value="$PROJECT_DIR$/src/test/java/io/kiamesdavies/revolut/account/AccountTest.java" />
         <option value="$PROJECT_DIR$/src/main/java/io/kiamesdavies/revolut/account/BadBankAccount.java" />
         <option value="$PROJECT_DIR$/src/main/java/io/kiamesdavies/revolut/services/impl/DefaultPayment.java" />
         <option value="$PROJECT_DIR$/src/test/resources/application.conf" />
-        <option value="$PROJECT_DIR$/src/main/java/io/kiamesdavies/revolut/account/BankAccount.java" />
         <option value="$PROJECT_DIR$/src/main/java/io/kiamesdavies/revolut/services/impl/TransferHandler.java" />
         <option value="$PROJECT_DIR$/src/main/java/io/kiamesdavies/revolut/models/Evt.java" />
-        <option value="$PROJECT_DIR$/pom.xml" />
         <option value="$PROJECT_DIR$/src/test/java/io/kiamesdavies/revolut/services/PaymentTest.java" />
-        <option value="$PROJECT_DIR$/src/main/java/io/kiamesdavies/revolut/BigBang.java" />
         <option value="$PROJECT_DIR$/src/main/java/io/kiamesdavies/revolut/controllers/PaymentController.java" />
         <option value="$PROJECT_DIR$/src/test/java/io/kiamesdavies/revolut/controllers/PaymentControllerTest.java" />
         <option value="$PROJECT_DIR$/src/main/java/io/kiamesdavies/revolut/services/Payment.java" />
@@ -209,6 +256,23 @@
         <option value="$PROJECT_DIR$/src/main/java/io/kiamesdavies/revolut/controllers/AccountController.java" />
         <option value="$PROJECT_DIR$/src/main/java/io/kiamesdavies/revolut/services/impl/DefaultAccount.java" />
         <option value="$PROJECT_DIR$/src/test/java/io/kiamesdavies/revolut/controllers/AccountControllerTest.java" />
+        <option value="$PROJECT_DIR$/src/test/java/io/kiamesdavies/revolut/services/AccountTest.java" />
+        <option value="$PROJECT_DIR$/src/main/resources/application.conf" />
+        <option value="$PROJECT_DIR$/src/test/resources/corploan_server_host.properties" />
+        <option value="$PROJECT_DIR$/src/test/resources/load_test/create_get_and_transfer_get_account.json" />
+        <option value="$PROJECT_DIR$/src/main/java/io/kiamesdavies/revolut/BigBang.java" />
+        <option value="$PROJECT_DIR$/src/test/resources/load_tests/create_get_and_transfer_get_account.json" />
+        <option value="$PROJECT_DIR$/src/main/resources/commons.conf" />
+        <option value="$PROJECT_DIR$/src/test/java/io/kiamesdavies/revolut/peformance/ServerLoadTest.java" />
+        <option value="$PROJECT_DIR$/src/test/java/io/kiamesdavies/revolut/peformance/AccountServiceTest.java" />
+        <option value="$PROJECT_DIR$/src/test/java/io/kiamesdavies/revolut/peformance/CombinedTestSuite.java" />
+        <option value="$PROJECT_DIR$/src/test/java/io/kiamesdavies/revolut/peformance/ConfirmTransferBalance.java" />
+        <option value="$PROJECT_DIR$/src/test/java/io/kiamesdavies/revolut/peformance/MultipleTransferLoadTest.java" />
+        <option value="$PROJECT_DIR$/src/test/resources/load_tests/confirm_account_balance.json" />
+        <option value="$PROJECT_DIR$/pom.xml" />
+        <option value="$PROJECT_DIR$/src/main/java/io/kiamesdavies/revolut/account/BankAccount.java" />
+        <option value="$PROJECT_DIR$/src/test/resources/load_generation.properties" />
+        <option value="$PROJECT_DIR$/src/test/resources/server_host.properties" />
       </list>
     </option>
   </component>
@@ -223,9 +287,8 @@
   </component>
   <component name="PhpWorkspaceProjectConfiguration" interpreter_name="PHP 7.3" />
   <component name="ProjectFrameBounds" fullScreen="true">
-    <option name="y" value="23" />
     <option name="width" value="1440" />
-    <option name="height" value="877" />
+    <option name="height" value="900" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectView">
@@ -233,6 +296,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -280,52 +344,6 @@
               <item name="money-transfer" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="revolut" type="462c0819:PsiDirectoryNode" />
-              <item name="controllers" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="money-transfer" type="b2602c69:ProjectViewProjectNode" />
-              <item name="money-transfer" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="revolut" type="462c0819:PsiDirectoryNode" />
-              <item name="exceptions" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="money-transfer" type="b2602c69:ProjectViewProjectNode" />
-              <item name="money-transfer" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="revolut" type="462c0819:PsiDirectoryNode" />
-              <item name="models" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="money-transfer" type="b2602c69:ProjectViewProjectNode" />
-              <item name="money-transfer" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="revolut" type="462c0819:PsiDirectoryNode" />
-              <item name="services" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="money-transfer" type="b2602c69:ProjectViewProjectNode" />
-              <item name="money-transfer" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="revolut" type="462c0819:PsiDirectoryNode" />
-              <item name="services" type="462c0819:PsiDirectoryNode" />
-              <item name="impl" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="money-transfer" type="b2602c69:ProjectViewProjectNode" />
-              <item name="money-transfer" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
               <item name="resources" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
@@ -347,25 +365,7 @@
               <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="test" type="462c0819:PsiDirectoryNode" />
               <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="revolut" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="money-transfer" type="b2602c69:ProjectViewProjectNode" />
-              <item name="money-transfer" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="test" type="462c0819:PsiDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="revolut" type="462c0819:PsiDirectoryNode" />
-              <item name="account" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="money-transfer" type="b2602c69:ProjectViewProjectNode" />
-              <item name="money-transfer" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="test" type="462c0819:PsiDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="revolut" type="462c0819:PsiDirectoryNode" />
-              <item name="controllers" type="462c0819:PsiDirectoryNode" />
+              <item name="integration_tests" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="money-transfer" type="b2602c69:ProjectViewProjectNode" />
@@ -373,12 +373,24 @@
               <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="test" type="462c0819:PsiDirectoryNode" />
               <item name="resources" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="money-transfer" type="b2602c69:ProjectViewProjectNode" />
+              <item name="money-transfer" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="test" type="462c0819:PsiDirectoryNode" />
+              <item name="resources" type="462c0819:PsiDirectoryNode" />
+              <item name="load_tests" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="money-transfer" type="b2602c69:ProjectViewProjectNode" />
+              <item name="money-transfer" type="462c0819:PsiDirectoryNode" />
+              <item name="target" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
         </subPane>
       </pane>
-      <pane id="Scope" />
       <pane id="PackagesPane" />
     </panes>
   </component>
@@ -389,7 +401,7 @@
     <property name="aspect.path.notification.shown" value="true" />
     <property name="database.console.LAST_STATE" value="false" />
     <property name="last_directory_selection" value="$PROJECT_DIR$/src/test/java/io/kiamesdavies/revolut" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/src/test/resources" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/src/test/resources/load_tests" />
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.detected.package.tslint" value="true" />
     <property name="node.js.path.for.package.eslint" value="project" />
@@ -402,17 +414,19 @@
   </component>
   <component name="RecentsManager">
     <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">
+      <recent name="" />
       <recent name="io.kiamesdavies.revolut" />
     </key>
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src/test/resources/load_tests" />
       <recent name="$PROJECT_DIR$/src/test/resources" />
       <recent name="$PROJECT_DIR$/src/main/resources" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/src/test/resources" />
-      <recent name="$PROJECT_DIR$/src/main/resources/db/default" />
-      <recent name="$PROJECT_DIR$/src/main/java/io/kiamesdavies/revolut/services" />
       <recent name="$PROJECT_DIR$/src/test" />
+      <recent name="$PROJECT_DIR$/src/main/java/io/kiamesdavies/revolut/services" />
+      <recent name="$PROJECT_DIR$/src/main/resources/db/default" />
       <recent name="$PROJECT_DIR$/src/main/resources/scripts" />
     </key>
   </component>
@@ -428,7 +442,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="JUnit.AccountControllerTest">
+  <component name="RunManager" selected="JUnit.CombinedTestSuiteIT">
     <configuration name="BigBang" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="io.kiamesdavies.revolut.BigBang" />
       <module name="money-transfer" />
@@ -457,61 +471,58 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="AccountControllerTest.shouldReturn200AndTransactionIdIfAccountsAreAvailableAndAmountIsSufficient" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="AccountService" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="money-transfer" />
       <extension name="coverage">
         <pattern>
-          <option name="PATTERN" value="io.kiamesdavies.revolut.controllers.*" />
+          <option name="PATTERN" value="integration_tests.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
-      <option name="PACKAGE_NAME" value="io.kiamesdavies.revolut.controllers" />
-      <option name="MAIN_CLASS_NAME" value="io.kiamesdavies.revolut.controllers.AccountControllerTest" />
-      <option name="METHOD_NAME" value="shouldReturn200AndTransactionIdIfAccountsAreAvailableAndAmountIsSufficient" />
-      <option name="TEST_OBJECT" value="method" />
+      <option name="PACKAGE_NAME" value="integration_tests" />
+      <option name="MAIN_CLASS_NAME" value="integration_tests.AccountService" />
+      <option name="TEST_OBJECT" value="class" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="AccountControllerTest.shouldReturn200IfBalanceIsRequested" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="CombinedTestSuiteIT" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="money-transfer" />
       <extension name="coverage">
         <pattern>
-          <option name="PATTERN" value="io.kiamesdavies.revolut.controllers.*" />
+          <option name="PATTERN" value="integration_tests.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
-      <option name="PACKAGE_NAME" value="io.kiamesdavies.revolut.controllers" />
-      <option name="MAIN_CLASS_NAME" value="io.kiamesdavies.revolut.controllers.AccountControllerTest" />
-      <option name="METHOD_NAME" value="shouldReturn200IfBalanceIsRequested" />
-      <option name="TEST_OBJECT" value="method" />
+      <option name="PACKAGE_NAME" value="integration_tests" />
+      <option name="MAIN_CLASS_NAME" value="integration_tests.CombinedTestSuiteIT" />
+      <option name="TEST_OBJECT" value="class" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="AccountControllerTest.test" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="MultipleTransferLoad" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="money-transfer" />
       <extension name="coverage">
         <pattern>
-          <option name="PATTERN" value="io.kiamesdavies.revolut.controllers.*" />
+          <option name="PATTERN" value="integration_tests.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
-      <option name="PACKAGE_NAME" value="io.kiamesdavies.revolut.controllers" />
-      <option name="MAIN_CLASS_NAME" value="io.kiamesdavies.revolut.controllers.AccountControllerTest" />
-      <option name="METHOD_NAME" value="test" />
-      <option name="TEST_OBJECT" value="method" />
+      <option name="PACKAGE_NAME" value="integration_tests" />
+      <option name="MAIN_CLASS_NAME" value="integration_tests.MultipleTransferLoad" />
+      <option name="TEST_OBJECT" value="class" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="JUnit.AccountControllerTest" />
-        <item itemvalue="JUnit.AccountControllerTest.shouldReturn200AndTransactionIdIfAccountsAreAvailableAndAmountIsSufficient" />
-        <item itemvalue="JUnit.AccountControllerTest.shouldReturn200IfBalanceIsRequested" />
-        <item itemvalue="JUnit.AccountControllerTest.test" />
+        <item itemvalue="JUnit.CombinedTestSuiteIT" />
         <item itemvalue="Application.BigBang" />
+        <item itemvalue="JUnit.MultipleTransferLoadIT" />
+        <item itemvalue="JUnit.AccountServiceIT" />
+        <item itemvalue="JUnit.AccountControllerTest" />
       </list>
     </recent_temporary>
   </component>
@@ -541,50 +552,51 @@
       <workItem from="1568451096298" duration="66951000" />
       <workItem from="1568617197865" duration="425000" />
       <workItem from="1568622260050" duration="25757000" />
-      <workItem from="1568657352592" duration="2615000" />
+      <workItem from="1568657352592" duration="10682000" />
+      <workItem from="1568678047160" duration="6514000" />
     </task>
     <servers />
   </component>
   <component name="TestHistory">
-    <history-entry file="AccountControllerTest_shouldReturn200AndTransactionIdIfAccountsAreAvailableAndAmountIsSufficient - 2019.09.16 at 20h 00m 51s.xml">
-      <configuration name="AccountControllerTest.shouldReturn200AndTransactionIdIfAccountsAreAvailableAndAmountIsSufficient" configurationId="JUnit" />
+    <history-entry file="ServerLoadTest - 2019.09.16 at 23h 47m 22s.xml">
+      <configuration name="ServerLoadTest" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="AccountControllerTest_shouldReturn200AndTransactionIdIfAccountsAreAvailableAndAmountIsSufficient - 2019.09.16 at 20h 01m 12s.xml">
-      <configuration name="AccountControllerTest.shouldReturn200AndTransactionIdIfAccountsAreAvailableAndAmountIsSufficient" configurationId="JUnit" />
+    <history-entry file="AccountServiceTest - 2019.09.17 at 00h 21m 29s.xml">
+      <configuration name="AccountServiceTest" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="AccountControllerTest_shouldReturn200AndTransactionIdIfAccountsAreAvailableAndAmountIsSufficient - 2019.09.16 at 20h 02m 09s.xml">
-      <configuration name="AccountControllerTest.shouldReturn200AndTransactionIdIfAccountsAreAvailableAndAmountIsSufficient" configurationId="JUnit" />
+    <history-entry file="AccountServiceTest - 2019.09.17 at 00h 36m 48s.xml">
+      <configuration name="AccountServiceTest" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="AccountControllerTest - 2019.09.16 at 20h 02m 23s.xml">
-      <configuration name="AccountControllerTest" configurationId="JUnit" />
+    <history-entry file="AccountServiceTest - 2019.09.17 at 00h 37m 05s.xml">
+      <configuration name="AccountServiceTest" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="AccountControllerTest - 2019.09.16 at 20h 03m 34s.xml">
-      <configuration name="AccountControllerTest" configurationId="JUnit" />
+    <history-entry file="AccountServiceTest - 2019.09.17 at 00h 37m 18s.xml">
+      <configuration name="AccountServiceTest" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="AccountControllerTest - 2019.09.16 at 20h 04m 02s.xml">
-      <configuration name="AccountControllerTest" configurationId="JUnit" />
+    <history-entry file="ServerLoadTest - 2019.09.17 at 00h 39m 28s.xml">
+      <configuration name="ServerLoadTest" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="AccountControllerTest - 2019.09.16 at 20h 04m 23s.xml">
-      <configuration name="AccountControllerTest" configurationId="JUnit" />
+    <history-entry file="ServerLoadTest - 2019.09.17 at 00h 40m 09s.xml">
+      <configuration name="ServerLoadTest" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="AccountControllerTest - 2019.09.16 at 20h 04m 37s.xml">
-      <configuration name="AccountControllerTest" configurationId="JUnit" />
+    <history-entry file="ServerLoadTest - 2019.09.17 at 00h 40m 34s.xml">
+      <configuration name="ServerLoadTest" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="AccountControllerTest - 2019.09.16 at 20h 08m 35s.xml">
-      <configuration name="AccountControllerTest" configurationId="JUnit" />
+    <history-entry file="ServerLoadTest - 2019.09.17 at 00h 40m 49s.xml">
+      <configuration name="ServerLoadTest" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="AccountControllerTest - 2019.09.16 at 20h 09m 54s.xml">
-      <configuration name="AccountControllerTest" configurationId="JUnit" />
+    <history-entry file="CombinedTestSuite - 2019.09.17 at 01h 07m 51s.xml">
+      <configuration name="CombinedTestSuite" configurationId="JUnit" />
     </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="104744000" />
+    <option name="totallyTimeSpent" value="119325000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1440" height="900" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.2639485" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.26752505" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.24964234" />
       <window_info id="Image Layers" order="2" />
       <window_info id="Designer" order="3" />
@@ -595,7 +607,7 @@
       <window_info anchor="bottom" id="Messages" order="1" weight="0.32771084" />
       <window_info anchor="bottom" id="Message" order="2" />
       <window_info anchor="bottom" id="Find" order="3" weight="0.32891566" />
-      <window_info active="true" anchor="bottom" id="Run" order="4" sideWeight="0.49928468" visible="true" weight="0.3192771" />
+      <window_info anchor="bottom" id="Run" order="4" sideWeight="0.49928468" weight="0.3192771" />
       <window_info anchor="bottom" id="Debug" order="5" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="6" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="7" weight="0.4" />
@@ -626,115 +638,6 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="jar://$MAVEN_REPOSITORY$/com/typesafe/akka/akka-http-testkit_2.12/10.1.6/akka-http-testkit_2.12-10.1.6.jar!/akka/http/javadsl/testkit/RouteTest.class">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="jar://$MAVEN_REPOSITORY$/com/typesafe/akka/akka-http-testkit_2.12/10.1.6/akka-http-testkit_2.12-10.1.6-sources.jar!/akka/http/javadsl/testkit/RouteTest.scala">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="jar://$MAVEN_REPOSITORY$/com/typesafe/akka/akka-http_2.12/10.1.9/akka-http_2.12-10.1.9-sources.jar!/akka/http/scaladsl/settings/RoutingSettings.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="382">
-          <caret line="49" selection-start-line="49" selection-end-line="49" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$MAVEN_REPOSITORY$/com/typesafe/akka/akka-http-testkit_2.12/10.1.9/akka-http-testkit_2.12-10.1.9.jar!/akka/http/javadsl/testkit/RouteTest.class">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="jar://$MAVEN_REPOSITORY$/com/typesafe/akka/akka-http-testkit_2.12/10.0.11/akka-http-testkit_2.12-10.0.11.jar!/akka/http/javadsl/testkit/RouteTest.class">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="jar://$MAVEN_REPOSITORY$/com/typesafe/akka/akka-http-core_2.12/10.0.15/akka-http-core_2.12-10.0.15.jar!/akka/http/impl/util/package.class">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="jar://$MAVEN_REPOSITORY$/com/typesafe/akka/akka-http-core_2.12/10.0.15/akka-http-core_2.12-10.0.15-sources.jar!/akka/http/impl/util/package.scala">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="jar://$MAVEN_REPOSITORY$/com/typesafe/akka/akka-http-testkit_2.12/10.0.15/akka-http-testkit_2.12-10.0.15.jar!/akka/http/javadsl/testkit/JUnitRouteTest.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="15">
-          <caret line="1" column="73" selection-start-line="1" selection-start-column="73" selection-end-line="1" selection-end-column="73" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$MAVEN_REPOSITORY$/com/typesafe/akka/akka-http-testkit_2.12/10.0.15/akka-http-testkit_2.12-10.0.15.jar!/akka/http/javadsl/testkit/JUnitRouteTestBase.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="15">
-          <caret line="1" column="33" selection-start-line="1" selection-start-column="33" selection-end-line="1" selection-end-column="33" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$MAVEN_REPOSITORY$/com/typesafe/akka/akka-http-testkit_2.12/10.0.15/akka-http-testkit_2.12-10.0.15-sources.jar!/akka/http/javadsl/testkit/JUnitRouteTest.scala">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/pom.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="115">
-          <caret line="124" column="17" lean-forward="true" selection-start-line="124" selection-start-column="17" selection-end-line="124" selection-end-column="17" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$MAVEN_REPOSITORY$/com/typesafe/akka/akka-actor_2.12/2.5.25/akka-actor_2.12-2.5.25-sources.jar!/akka/actor/ActorRefProvider.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="96">
-          <caret line="199" column="6" selection-start-line="199" selection-start-column="6" selection-end-line="199" selection-end-column="6" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$MAVEN_REPOSITORY$/com/typesafe/akka/akka-http-core_2.12/10.1.9/akka-http-core_2.12-10.1.9-sources.jar!/akka/http/impl/util/package.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="170">
-          <caret line="33" selection-start-line="33" selection-end-line="33" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$MAVEN_REPOSITORY$/com/typesafe/akka/akka-http-testkit_2.12/10.1.9/akka-http-testkit_2.12-10.1.9.jar!/akka/http/javadsl/testkit/JUnitRouteTestBase.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="45">
-          <caret line="3" column="15" selection-start-line="3" selection-start-column="15" selection-end-line="3" selection-end-column="15" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$MAVEN_REPOSITORY$/com/typesafe/akka/akka-stream_2.12/2.5.25/akka-stream_2.12-2.5.25.jar!/akka/stream/ActorMaterializerHelper.class">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="jar://$MAVEN_REPOSITORY$/com/typesafe/akka/akka-http_2.12/10.1.9/akka-http_2.12-10.1.9-sources.jar!/akka/http/scaladsl/server/RequestContextImpl.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="140">
-          <caret line="34" column="132" selection-start-line="34" selection-start-column="120" selection-end-line="34" selection-end-column="132" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/test/java/io/kiamesdavies/revolut/services/AccountTest.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="467">
-          <caret line="123" column="38" selection-start-line="123" selection-start-column="9" selection-end-line="123" selection-end-column="38" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$MAVEN_REPOSITORY$/com/typesafe/akka/akka-http_2.12/10.1.9/akka-http_2.12-10.1.9-sources.jar!/akka/http/javadsl/server/HttpApp.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="571">
-          <caret line="116" column="30" lean-forward="true" selection-start-line="61" selection-start-column="3" selection-end-line="61" selection-end-column="5" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$MAVEN_REPOSITORY$/com/typesafe/akka/akka-http-core_2.12/10.1.9/akka-http-core_2.12-10.1.9-sources.jar!/akka/http/javadsl/model/HttpRequest.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-552">
-          <caret line="16" column="22" selection-start-line="16" selection-start-column="22" selection-end-line="16" selection-end-column="22" />
-          <folding>
-            <element signature="e#1973#1974#0" expanded="true" />
-            <element signature="e#2036#2037#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/io/kiamesdavies/revolut/services/impl/package-info.java" />
     <entry file="jar://$MAVEN_REPOSITORY$/com/typesafe/akka/akka-http_2.12/10.1.9/akka-http_2.12-10.1.9-sources.jar!/akka/http/javadsl/server/PathMatchers.scala">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1049">
@@ -830,26 +733,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/io/kiamesdavies/revolut/Bootstrap.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="327">
-          <caret line="39" column="7" selection-start-line="39" selection-start-column="7" selection-end-line="39" selection-end-column="7" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/io/kiamesdavies/revolut/BigBang.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="135">
-          <caret line="9" column="3" lean-forward="true" selection-start-line="9" selection-end-line="10" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="jar://$MAVEN_REPOSITORY$/com/typesafe/akka/akka-http-core_2.12/10.1.9/akka-http-core_2.12-10.1.9-sources.jar!/akka/http/javadsl/model/HttpEntity.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-160">
@@ -875,26 +758,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="351">
           <caret line="38" column="6" selection-start-line="38" selection-start-column="6" selection-end-line="38" selection-end-column="6" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/io/kiamesdavies/revolut/services/Account.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="480">
-          <caret line="32" selection-start-line="32" selection-end-line="32" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/test/java/io/kiamesdavies/revolut/account/AccountTest.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1023">
-          <caret line="132" column="35" selection-start-line="132" selection-start-column="35" selection-end-line="132" selection-end-column="35" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -929,30 +792,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/io/kiamesdavies/revolut/services/impl/TransferHandler.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="375">
-          <caret line="37" column="54" selection-start-line="37" selection-start-column="43" selection-end-line="37" selection-end-column="54" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/io/kiamesdavies/revolut/account/BankAccount.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="210">
-          <caret line="33" column="48" selection-start-line="33" selection-start-column="48" selection-end-line="33" selection-end-column="48" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/io/kiamesdavies/revolut/account/BadBankAccount.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="60">
-          <caret line="5" column="13" selection-start-line="5" selection-start-column="13" selection-end-line="5" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/io/kiamesdavies/revolut/services/impl/DefaultAccount.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="901">
@@ -973,15 +812,219 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/test/java/io/kiamesdavies/revolut/controllers/AccountControllerTest.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/io/kiamesdavies/revolut/services/impl/TransferHandler.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="323">
-          <caret line="43" column="38" selection-start-line="43" selection-start-column="38" selection-end-line="43" selection-end-column="38" />
+        <state relative-caret-position="240">
+          <caret line="16" column="32" selection-start-line="16" selection-start-column="32" selection-end-line="16" selection-end-column="32" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#3602#3603#0" expanded="true" />
-            <element signature="e#3667#3668#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/test/java/io/kiamesdavies/revolut/services/AccountTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="153">
+          <caret line="136" column="50" selection-start-line="136" selection-start-column="37" selection-end-line="136" selection-end-column="50" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/test/resources/application.conf">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="135">
+          <caret line="9" selection-start-line="9" selection-end-line="9" selection-end-column="63" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/io/kiamesdavies/revolut/models/TransactionResult.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="75">
+          <caret line="5" column="41" selection-start-line="5" selection-start-column="28" selection-end-line="5" selection-end-column="41" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/io/kiamesdavies/revolut/services/Account.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="120">
+          <caret line="8" column="17" selection-start-line="8" selection-start-column="17" selection-end-line="8" selection-end-column="17" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/target/zerocode-junit-interactive-fuzzy-search.html" />
+    <entry file="jar://$MAVEN_REPOSITORY$/org/jsmart/zerocode-tdd/1.3.7/zerocode-tdd-1.3.7.jar!/org/jsmart/zerocode/core/runner/parallel/ZeroCodeLoadRunner.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-36">
+          <caret line="20" column="13" selection-start-line="20" selection-start-column="13" selection-end-line="20" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/io/kiamesdavies/revolut/models/AccountBalance.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="120">
+          <caret line="9" column="30" selection-start-line="9" selection-start-column="23" selection-end-line="9" selection-end-column="30" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/test/java/io/kiamesdavies/revolut/controllers/AccountControllerTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="60">
+          <caret line="19" column="13" selection-start-line="19" selection-start-column="13" selection-end-line="19" selection-end-column="13" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/test/java/io/kiamesdavies/revolut/account/AccountTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="240">
+          <caret line="16" selection-start-line="16" selection-end-line="18" selection-end-column="61" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/org/jsmart/zerocode-tdd/1.3.7/zerocode-tdd-1.3.7-sources.jar!/org/jsmart/zerocode/core/runner/parallel/ZeroCodeLoadRunner.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="302">
+          <caret line="56" column="51" selection-start-line="56" selection-start-column="51" selection-end-line="56" selection-end-column="51" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/test/java/integration_tests/AccountService.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="195">
+          <caret line="13" column="25" selection-start-line="13" selection-start-column="25" selection-end-line="13" selection-end-column="25" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/test/java/integration_tests/MultipleTransferLoad.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="285">
+          <caret line="19" selection-start-line="19" selection-end-line="19" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/test/java/integration_tests/ConfirmTransferBalance.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="150">
+          <caret line="10" column="36" selection-start-line="10" selection-start-column="36" selection-end-line="10" selection-end-column="36" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/io/kiamesdavies/revolut/BigBang.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="315">
+          <caret line="23" selection-start-line="23" selection-end-line="23" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/test/resources/load_tests/confirm_account_balance.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="270">
+          <caret line="18" column="46" selection-start-line="18" selection-start-column="15" selection-end-line="18" selection-end-column="46" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/test/resources/load_tests/create_get_and_transfer_get_account.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-372">
+          <caret line="26" column="9" selection-start-line="26" selection-start-column="9" selection-end-line="26" selection-end-column="9" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/pom.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="200">
+          <caret line="230" column="60" selection-start-line="230" selection-start-column="60" selection-end-line="230" selection-end-column="60" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/test/java/integration_tests/CombinedTestSuiteIT.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="165">
+          <caret line="11" column="32" selection-start-line="11" selection-start-column="13" selection-end-line="11" selection-end-column="32" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/io/kiamesdavies/revolut/account/BadBankAccount.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="60">
+          <caret line="5" column="13" selection-start-line="5" selection-start-column="13" selection-end-line="5" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/io/kiamesdavies/revolut/account/Bank.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="315">
+          <caret line="36" column="32" selection-start-line="36" selection-start-column="19" selection-end-line="36" selection-end-column="32" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/io/kiamesdavies/revolut/account/BankAccount.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="248">
+          <caret line="39" column="104" selection-start-line="39" selection-start-column="97" selection-end-line="39" selection-end-column="104" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/resources/commons.conf">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="345">
+          <caret line="23" column="20" selection-start-line="23" selection-start-column="14" selection-end-line="23" selection-end-column="20" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/resources/logback.xml">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/resources/application.conf">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="135">
+          <caret line="9" column="85" selection-start-line="9" selection-start-column="85" selection-end-line="9" selection-end-column="85" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/io/kiamesdavies/revolut/Bootstrap.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-42">
+          <caret line="19" column="24" lean-forward="true" selection-start-line="19" selection-start-column="24" selection-end-line="19" selection-end-column="24" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/test/resources/load_generation.properties">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="90">
+          <caret line="6" selection-start-line="6" selection-end-line="6" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/test/resources/server_host.properties">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="45">
+          <caret line="3" lean-forward="true" selection-start-line="3" selection-end-line="4" selection-end-column="78" />
         </state>
       </provider>
     </entry>
