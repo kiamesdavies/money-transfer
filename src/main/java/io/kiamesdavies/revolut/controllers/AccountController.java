@@ -38,9 +38,7 @@ public class AccountController extends AllDirectives {
                         pathPrefix(segment("transfer").slash(integerSegment()), accountToId ->
 
                                 pathEndOrSingleSlash(() -> post(() -> entity(Jackson.unmarshaller(MoneyTransfer.class),
-                                        mock -> completeWithFuture(this.transfer(accountFromId.toString(), accountToId.toString(), mock))
-
-                                        )
+                                        mock -> completeWithFuture(this.transfer(accountFromId.toString(), accountToId.toString(), mock)))
                                 ))
                         )
                 )

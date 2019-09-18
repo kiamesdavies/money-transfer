@@ -34,27 +34,13 @@ public class BankAccount extends AbstractPersistentActorWithTimers {
     private Map<String, LocalDateTime> receivedCmds = new HashMap<>();
 
 
-    public BankAccount() {
-        this.bankAccountId = self().path().name();
+    public BankAccount(String bankAccountId) {
+        this.bankAccountId = bankAccountId;
         state = new AccountBalance(bankAccountId, BigDecimal.valueOf(10000));
         timers().startPeriodicTimer(new ReceivedCmdCleanUp(), new ReceivedCmdCleanUp(), Duration.ofHours(6));
     }
 
-    /**
-     * Creates a BackoffSupervisor  incase the database is not available, and we need to give it some time to start-up again
-     *
-     * @param bankAccountId the account id
-     * @return BankAccount  configuration object
-     */
-    public static Props props(String bankAccountId) {
-        return BackoffSupervisor.props(
-                BackoffOpts.onStop(
-                        Props.create(BankAccount.class), bankAccountId,
-                        FiniteDuration.create(1, TimeUnit.SECONDS),
-                        FiniteDuration.create(5, TimeUnit.SECONDS),
-                        0.2)
-        );
-    }
+
 
     @Override
     public Receive createReceiveRecover() {
@@ -83,12 +69,10 @@ public class BankAccount extends AbstractPersistentActorWithTimers {
                 .build();
     }
 
-    @Override
-    public String persistenceId() {
-        return bankAccountId;
-    }
+
 
     private void update(Evt.BaseAccountEvt evt) {
+        receivedCmds.put(evt.getTransactionId(), LocalDateTime.now());
         if (evt instanceof Evt.DepositEvent) {
             AccountBalance.deposit(state, evt.getAmount());
         } else if (evt instanceof Evt.WithdrawEvent) {
@@ -96,10 +80,6 @@ public class BankAccount extends AbstractPersistentActorWithTimers {
         }
     }
 
-    @Override
-    public void preStart() {
-        log.info("Starting bank account {}", bankAccountId);
-    }
 
     private void handleCmd(Cmd.BaseAccountCmd c) {
         final Evt.BaseAccountEvt evt = c instanceof Cmd.DepositCmd ? new Evt.DepositEvent((Cmd.DepositCmd) c) : new Evt.WithdrawEvent((Cmd.WithdrawCmd) c);
@@ -108,7 +88,7 @@ public class BankAccount extends AbstractPersistentActorWithTimers {
         } else {
             persist(evt,
                     (Evt.BaseAccountEvt e) -> {
-                        receivedCmds.put(c.transactionId, LocalDateTime.now());
+
                         this.update(e);
                         sender().tell(CmdAck.from(c, e), self());
                         if (lastSequenceNr() % snapShotInterval == 0 && lastSequenceNr() != 0) {
@@ -119,5 +99,33 @@ public class BankAccount extends AbstractPersistentActorWithTimers {
     }
 
     private static class ReceivedCmdCleanUp {
+    }
+
+
+    @Override
+    public String persistenceId() {
+        return String.format("bank-account-%s",bankAccountId);
+    }
+
+    /**
+     * Creates a BackoffSupervisor  incase the database is not available, and we need to give it some time to start-up again
+     *
+     * @param bankAccountId the account id
+     * @return BankAccount  configuration object
+     */
+    public static Props props(String bankAccountId) {
+        return BackoffSupervisor.props(
+                BackoffOpts.onStop(
+                        Props.create(BankAccount.class,bankAccountId), bankAccountId,
+                        FiniteDuration.create(1, TimeUnit.SECONDS),
+                        FiniteDuration.create(5, TimeUnit.SECONDS),
+                        0.2)
+        );
+    }
+
+
+    @Override
+    public void preStart() {
+        log.info("Starting bank account {}", bankAccountId);
     }
 }

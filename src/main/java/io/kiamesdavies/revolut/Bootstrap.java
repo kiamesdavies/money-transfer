@@ -5,14 +5,15 @@ import akka.actor.ActorSystem;
 import akka.actor.Terminated;
 import akka.http.javadsl.server.Route;
 import akka.stream.ActorMaterializer;
-import io.kiamesdavies.revolut.account.BadBankAccount;
 import io.kiamesdavies.revolut.account.Bank;
 import io.kiamesdavies.revolut.account.BankAccount;
+import io.kiamesdavies.revolut.account.UnavailableBankAccount;
 import io.kiamesdavies.revolut.controllers.AccountController;
 import io.kiamesdavies.revolut.services.Account;
 import io.kiamesdavies.revolut.services.impl.DefaultAccount;
 import scala.concurrent.Future;
 
+import java.time.Duration;
 import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -35,6 +36,8 @@ public class Bootstrap {
         materializer = ActorMaterializer.create(actorSystem);
         route = new AccountController(actorSystem, account).createRoute();
 
+        actorSystem.scheduler().scheduleOnce(Duration.ofMinutes(30), () -> account.walkBackInTime(), actorSystem.dispatcher());
+
     }
 
     /**
@@ -48,7 +51,7 @@ public class Bootstrap {
                 actorSystem.actorOf(BankAccount.props(f), String.format("supervisor-for-%s", f))));
 
         //create a bad bank account to demonstrate rollback
-        bankAccounts.put("10", actorSystem.actorOf(BadBankAccount.props(), "bad-account"));
+        bankAccounts.put("10", actorSystem.actorOf(UnavailableBankAccount.props(), "bad-account"));
 
         return bankAccounts;
     }

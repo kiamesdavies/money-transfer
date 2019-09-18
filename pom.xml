@@ -4,7 +4,7 @@
     <groupId>io.kiamesdavies.revolut</groupId>
     <artifactId>money-transfer</artifactId>
     <packaging>jar</packaging>
-    <version>1.0-SNAPSHOT</version>
+    <version>1.0</version>
     <name>money-transfer</name>
     <url>http://maven.apache.org</url>
 
@@ -213,6 +213,7 @@
                             <async>true</async>
                         </configuration>
                     </execution>
+
                 </executions>
             </plugin>
 

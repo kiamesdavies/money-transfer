@@ -1,5 +1,5 @@
 {
-  "scenarioName": "Transfer Core API Test",
+  "scenarioName": "Transfer Balance Test",
   "steps": [
 
     {
@@ -11,7 +11,7 @@
       "assertions": {
         "status": 200,
         "body": {
-          "balance": "$EQ.13000"
+          "balance": "$EQ.16000"
         }
       }
     },
@@ -24,7 +24,7 @@
       "assertions": {
         "status": 200,
         "body": {
-          "balance": "$EQ.7000"
+          "balance": "$EQ.4000"
         }
       }
     }

@@ -28,4 +28,11 @@ public interface Account {
     CompletionStage<AccountBalance> getBalance(String bankAccountId);
 
 
+    /**
+     * This is meant to be called once when the server starts,
+     * it queries the read side of the application and recreates transaction handler for transactions {@link io.kiamesdavies.revolut.models.TransactionStatus} that are in NEW, WITHDRAWN , DEPOSIT_FAILED or ROLLBACK_FAILED status.
+     */
+    void walkBackInTime();
+
+
 }

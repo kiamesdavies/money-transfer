@@ -4,7 +4,7 @@
   <groupId>io.kiamesdavies.revolut</groupId>
   <artifactId>money-transfer</artifactId>
   <name>money-transfer</name>
-  <version>1.0-SNAPSHOT</version>
+  <version>1.0</version>
   <url>http://maven.apache.org</url>
   <build>
     <plugins>
@@ -117,12 +117,36 @@
       <artifactId>junit-jupiter-api</artifactId>
       <version>5.5.0</version>
       <scope>test</scope>
+      <exclusions>
+        <exclusion>
+          <artifactId>apiguardian-api</artifactId>
+          <groupId>org.apiguardian</groupId>
+        </exclusion>
+        <exclusion>
+          <artifactId>opentest4j</artifactId>
+          <groupId>org.opentest4j</groupId>
+        </exclusion>
+        <exclusion>
+          <artifactId>junit-platform-commons</artifactId>
+          <groupId>org.junit.platform</groupId>
+        </exclusion>
+      </exclusions>
     </dependency>
     <dependency>
       <groupId>org.junit.jupiter</groupId>
       <artifactId>junit-jupiter-engine</artifactId>
       <version>5.5.0</version>
       <scope>test</scope>
+      <exclusions>
+        <exclusion>
+          <artifactId>junit-platform-engine</artifactId>
+          <groupId>org.junit.platform</groupId>
+        </exclusion>
+        <exclusion>
+          <artifactId>apiguardian-api</artifactId>
+          <groupId>org.apiguardian</groupId>
+        </exclusion>
+      </exclusions>
     </dependency>
     <dependency>
       <groupId>com.typesafe.akka</groupId>
@@ -144,9 +168,39 @@
     </dependency>
     <dependency>
       <groupId>com.typesafe.akka</groupId>
+      <artifactId>akka-stream-testkit_2.12</artifactId>
+      <version>2.5.25</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.typesafe.akka</groupId>
       <artifactId>akka-http-testkit_2.12</artifactId>
       <version>10.1.9</version>
       <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.jsmart</groupId>
+      <artifactId>zerocode-tdd-jupiter</artifactId>
+      <version>1.3.7</version>
+      <scope>test</scope>
+      <exclusions>
+        <exclusion>
+          <artifactId>zerocode-tdd</artifactId>
+          <groupId>org.jsmart</groupId>
+        </exclusion>
+        <exclusion>
+          <artifactId>junit-jupiter-params</artifactId>
+          <groupId>org.junit.jupiter</groupId>
+        </exclusion>
+        <exclusion>
+          <artifactId>junit-vintage-engine</artifactId>
+          <groupId>org.junit.vintage</groupId>
+        </exclusion>
+        <exclusion>
+          <artifactId>junit-platform-runner</artifactId>
+          <groupId>org.junit.platform</groupId>
+        </exclusion>
+      </exclusions>
     </dependency>
   </dependencies>
   <properties>

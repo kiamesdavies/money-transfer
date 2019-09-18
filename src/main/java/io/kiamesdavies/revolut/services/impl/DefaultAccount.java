@@ -10,6 +10,8 @@ import io.kiamesdavies.revolut.models.*;
 import io.kiamesdavies.revolut.services.Account;
 
 import java.time.Duration;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 import java.util.concurrent.CompletionException;
@@ -77,6 +79,20 @@ public class DefaultAccount implements Account {
                         return (AccountBalance) ((QueryAck) g).response;
                     });
                 });
+    }
+
+    /**
+     * This is meant to be called once when the server starts,
+     * it queries the read side of the application and recreates transaction handler for transactions {@link TransactionStatus} that are in NEW, WITHDRAWN , DEPOSIT_FAILED status.
+     */
+    @Override
+    public void walkBackInTime() {
+        //TODO Queries the read side for transactions with the aforementioned status
+        List<String> hangingTransactions = new ArrayList<>();
+        hangingTransactions.forEach(transactionId -> {
+            //automatically it will create its state from previous event and continue from where it stopped
+            actorSystem.actorOf(TransferHandler.props(transactionId, bank), String.format("transaction-%s", transactionId));
+        });
     }
 
     @Override

@@ -3,9 +3,9 @@ package io.kiamesdavies.revolut.account;
 import akka.actor.AbstractLoggingActor;
 import akka.actor.Props;
 
-public class BadBankAccount extends AbstractLoggingActor {
+public class UnavailableBankAccount extends AbstractLoggingActor {
     public static Props props() {
-        return Props.create(BadBankAccount.class);
+        return Props.create(UnavailableBankAccount.class);
     }
 
     @Override

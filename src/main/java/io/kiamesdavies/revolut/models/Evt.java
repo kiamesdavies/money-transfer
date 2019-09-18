@@ -14,11 +14,13 @@ public abstract class Evt implements Serializable {
         private String bankAccountId;
         private BigDecimal amount;
         private String transactionId;
+        private long messageNanoTime;
 
         BaseAccountEvt(String bankAccountId, String transactionId, BigDecimal amount) {
             this.setBankAccountId(bankAccountId);
             this.transactionId = transactionId;
             this.setAmount(amount);
+            messageNanoTime = System.nanoTime();
         }
 
         BaseAccountEvt() {
@@ -33,12 +35,28 @@ public abstract class Evt implements Serializable {
             this.bankAccountId = bankAccountId;
         }
 
+        public String getTransactionId() {
+            return transactionId;
+        }
+
+        public void setTransactionId(String transactionId) {
+            this.transactionId = transactionId;
+        }
+
         public BigDecimal getAmount() {
             return amount;
         }
 
         public void setAmount(BigDecimal amount) {
             this.amount = amount;
+        }
+
+        public long getMessageNanoTime() {
+            return messageNanoTime;
+        }
+
+        public void setMessageNanoTime(long messageNanoTime) {
+            this.messageNanoTime = messageNanoTime;
         }
     }
 
@@ -54,8 +72,7 @@ public abstract class Evt implements Serializable {
         }
 
         public DepositEvent(Cmd.DepositCmd depositCmd) {
-            //a transaction id with rollback shows that it was intended for rollback and simply replaced
-            this(depositCmd.bankAccountId, depositCmd.transactionId.replace("-rollback", ""), depositCmd.amount);
+            this(depositCmd.bankAccountId, depositCmd.transactionId, depositCmd.amount);
         }
     }
 
@@ -71,8 +88,7 @@ public abstract class Evt implements Serializable {
         }
 
         public WithdrawEvent(Cmd.WithdrawCmd withdrawCmd) {
-            //a transaction id with rollback shows that it was intended for rollback and simply replaced
-            this(withdrawCmd.bankAccountId, withdrawCmd.transactionId.replace("-rollback", ""), withdrawCmd.amount);
+            this(withdrawCmd.bankAccountId, withdrawCmd.transactionId, withdrawCmd.amount);
         }
     }
 
@@ -134,6 +150,7 @@ public abstract class Evt implements Serializable {
         private String accountToId;
         private String accountFromId;
         private TransactionStatus status;
+        private long messageNanoTime;
 
         public TransactionEvent() {
         }
@@ -146,6 +163,7 @@ public abstract class Evt implements Serializable {
             this.accountToId = accountToId;
             this.accountFromId = accountFromId;
             this.status = status;
+            messageNanoTime = System.nanoTime();
         }
 
         public TransactionEvent(String transactionId, Cmd.TransferCmd transferCmd, TransactionStatus status) {
@@ -158,18 +176,7 @@ public abstract class Evt implements Serializable {
         }
 
 
-        @Override
-        public String toString() {
-            return "TransactionEvent{" +
-                    "transactionId='" + getTransactionId() + '\'' +
-                    ", amount=" + getAmount() +
-                    ", remarks='" + getRemarks() + '\'' +
-                    ", source='" + getSource() + '\'' +
-                    ", accountToId='" + getAccountToId() + '\'' +
-                    ", accountFromId='" + getAccountFromId() + '\'' +
-                    ", status=" + getStatus() +
-                    '}';
-        }
+
 
         public String getTransactionId() {
             return transactionId;
@@ -197,6 +204,28 @@ public abstract class Evt implements Serializable {
 
         public TransactionStatus getStatus() {
             return status;
+        }
+
+        public long getMessageNanoTime() {
+            return messageNanoTime;
+        }
+
+        public void setMessageNanoTime(long messageNanoTime) {
+            this.messageNanoTime = messageNanoTime;
+        }
+
+
+        @Override
+        public String toString() {
+            return "TransactionEvent{" +
+                    "transactionId='" + getTransactionId() + '\'' +
+                    ", amount=" + getAmount() +
+                    ", remarks='" + getRemarks() + '\'' +
+                    ", source='" + getSource() + '\'' +
+                    ", accountToId='" + getAccountToId() + '\'' +
+                    ", accountFromId='" + getAccountFromId() + '\'' +
+                    ", status=" + getStatus() +
+                    '}';
         }
     }
 

@@ -1,5 +1,8 @@
 package io.kiamesdavies.revolut.models;
 
+/**
+ * Command Acknowledgement
+ */
 public class CmdAck {
     public final String deliveryId;
     public final Evt event;
