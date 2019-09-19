@@ -14,6 +14,7 @@ dist
 /RUNNING_PID
 /.settings
 /target/
+.DS_Store
 
 /commons/nbproject/
 /complaint/nbproject/

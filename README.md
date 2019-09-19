@@ -1,4 +1,4 @@
-## Money Transfer API with Event Sourcing and CQRS
+## Revolut Money Transfer API with Event Sourcing and CQRS
 
 This project facilitates the transfer of money between two demo accounts.
 
@@ -75,14 +75,16 @@ The image above pretty explains it all.
 
 ### Possible Real-life Scenario
 
-<img  alt="rollback" width="837" src="https://user-images.githubusercontent.com/3046068/65185432-71f2da00-da5f-11e9-8aab-c5597323880d.png">  
 Crash at the sender's account
+<img  alt="rollback" width="837" src="https://user-images.githubusercontent.com/3046068/65185432-71f2da00-da5f-11e9-8aab-c5597323880d.png">  
+
 
 <br/>
-<img  alt="rollback" width="837" src="https://user-images.githubusercontent.com/3046068/65185465-846d1380-da5f-11e9-9481-3c8a5ab738e7.png">  
 Crash at the receiver's account
-<br/>
+<img  alt="rollback" width="837" src="https://user-images.githubusercontent.com/3046068/65185465-846d1380-da5f-11e9-9481-3c8a5ab738e7.png">  
 
+<br/>
+<br/>
 
 As shown in the images above, there are two points this crash matters for every bank account transaction
 + Before persisting the withdrawal or deposit event
@@ -94,7 +96,7 @@ Two types of crashes can lead to this
 
 
 
-## The actor itself crashes
+### The actor itself crashes
 This is fairly easy to resolve, every bank account is started with a supervisor, that monitors it, and in case of a crash, it resumes the stopped actor every 5 seconds. As shown here
 
    ```
@@ -111,7 +113,7 @@ This is fairly easy to resolve, every bank account is started with a supervisor,
      
 Meanwhile the transfer handler keeps re-sending the  command 6 times *(configurable)* every 10 seconds *(configurable)*  if the bank account responds before the count down, the normal process resumes, otherwise if it's in the first stage of withdrawal it marks the transaction as failed and return to the user else it starts a rollback as shown in the image below.
     
-## The whole system crashes
+### The whole system crashes
 After the servers, it schedules a message in 30 minutes time to send a query to the read side to get a list of hanging transactions (transaction not marked as completed, failed or rollback) and re-creates their transfer handler, each transfer handler uses its events to build its state and resumes from where it stopped. 
     
   ```
@@ -125,7 +127,7 @@ Inside the function that recreates the transfer handler
    });
 ```
 
-## Rollback Process
+### Rollback Process
 
 <img  alt="rollback" width="837" src="https://user-images.githubusercontent.com/3046068/65185253-11639d00-da5f-11e9-9e08-291bb3772658.png">   
   
@@ -163,7 +165,49 @@ Then you can open ur browser at [localhost:9099](http://localhost:9099/)
 Usage
 ===
 
-talk about the available endpoints
+<table>
+<thead>
+<tr>
+<th>Endpoint</th>
+<th>Description</th>
+<th>Body</th>
+<th>Success Response</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+	<td><code>GET /account/{id}</code></td>
+	<td>Get the account balance of the specified if</td>
+	</td>
+	<td>
+      <pre>
+{
+ "bankAccountId": "string",
+ "balance": "double"
+}
+	  </pre>
+    </td>
+</tr>
+<tr>
+	<td><code>POST /account/{accountFromId}/tranfer/{accountToId}</code></td>
+	<td>Transfer amount from accountFromId to accountToId</td>
+	<td>
+	{
+     "amount": "double",
+     "remarks": "string",
+     "source":"string"
+    }
+	</td>
+	<td>
+      <pre>
+{
+ "transactionId": "string"
+}
+	  </pre>
+    </td>
+</tr>
+</tbody>
+</table>
 
 Performance Testing
 ===
