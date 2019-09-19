@@ -24,14 +24,33 @@ class TransferHandler extends AbstractPersistentActorWithAtLeastOnceDelivery {
     private final LoggingAdapter log = Logging.getLogger(getContext().getSystem(), this);
 
     private final String transactionId;
+
     private final ActorRef bank;
+    /**
+     * Define behaviour of the handler while deducting money from the sender's account
+     */
     private final AbstractActor.Receive debtor;
+    /**
+     * Define behaviour of the handler while crediting the receiver's account
+     */
     private final AbstractActor.Receive creditor;
+    /**
+     * Define behaviour of the handler while performing a roll back
+     */
     private final AbstractActor.Receive rollback;
+    /**
+     * Reference to api call that initiated the transfer
+     */
     private ActorRef initiator;
     private Evt.TransactionEvent state;
 
+    /**
+     * Reference to the sender's account
+     */
     private ActorRef accountFrom;
+    /**
+     * Reference to the receiver's account
+     */
     private ActorRef accountTo;
 
     public TransferHandler(String transactionId, ActorRef bank) {

@@ -39,7 +39,7 @@ Why Event Sourcing and CQRS
 
 The concept of transferring money is centered around immutable facts `I transferred x amount` etc, and all these facts need to be saved in an append-only store for audit trail. An audit trail is a first-class citizen of event sourcing, and not an afterthought by having a history table.
 
-CQRS provides us with the ability to scale independent part of our systems, and provide better query support to display our data since the event sourcing part only uses an append log.
+CQRS provides us with the ability to scale independent part of our systems, and provide better query support to aggregate our data since the event sourcing part only uses an append log.
 
 Project Structure
 ===
@@ -51,9 +51,9 @@ The project makes use of just one maven project with a root package `io.kiamesda
 - `controllers`: Contains the directives to expose the application for HTTP access
 - `exceptions`: Custom exceptions
 - `models`: Contains events, commands and domain models used in the application
-- `services`: Contains the API and default implementation for the Money Transfer.
+- `services`: Contains the API and implementation for the Money Transfer.
 
-For a glance, there are four classes *(DefaultAccount, TransferHandler, Bank, and BankAccount)* responsible for the majority of the functionalities in the system. 
+Quick glance, there are four classes *(DefaultAccount, TransferHandler, Bank, and BankAccount)* responsible for the majority of the functionalities in the system. 
 
 
 Scenarios
@@ -76,21 +76,21 @@ The image above pretty explains it all.
 ### Possible Real-life Scenario
 
 Crash at the sender's account
-<img  alt="rollback" width="837" src="https://user-images.githubusercontent.com/3046068/65185432-71f2da00-da5f-11e9-8aab-c5597323880d.png">  
+<img  alt="rollback" width="600" src="https://user-images.githubusercontent.com/3046068/65185432-71f2da00-da5f-11e9-8aab-c5597323880d.png">  
 
 
 <br/>
 Crash at the receiver's account
-<img  alt="rollback" width="837" src="https://user-images.githubusercontent.com/3046068/65185465-846d1380-da5f-11e9-9481-3c8a5ab738e7.png">  
+<img  alt="rollback" width="600" src="https://user-images.githubusercontent.com/3046068/65185465-846d1380-da5f-11e9-9481-3c8a5ab738e7.png">  
 
 <br/>
 <br/>
 
-As shown in the images above, there are two points this crash matters for every bank account transaction
+As shown in the images above, there are two points that a crash at the account level is important
 + Before persisting the withdrawal or deposit event
 + After persisting the event but before it can respond
 
-Two types of crashes can lead to this
+Two types of crashes can lead to any of the above are:
 + The actor itself crashes (likely due to persistence failure)
 + The whole system crashes
 
@@ -111,13 +111,18 @@ This is fairly easy to resolve, every bank account is started with a supervisor,
     }
 ```
      
-Meanwhile the transfer handler keeps re-sending the  command 6 times *(configurable)* every 10 seconds *(configurable)*  if the bank account responds before the count down, the normal process resumes, otherwise if it's in the first stage of withdrawal it marks the transaction as failed and return to the user else it starts a [rollback process](#rollback-process).
+Meanwhile the transfer handler keeps re-sending every 10 seconds *(configurable)* in 6 times*(configurable)*, if the bank account responds before the countdown ends, the normal process resumes, otherwise if it's in the first stage of withdrawal it marks the transaction as failed and return to the user else it starts a [rollback process](#rollback-process).
     
 ### The whole system crashes
-After the servers, it schedules a message in 30 minutes time to send a query to the read side to get a list of hanging transactions (transaction not marked as completed, failed or rollback) and re-creates their transfer handler, each transfer handler uses its events to build its state and resumes from where it stopped. 
+Whenever the server starts, it schedules a message after 30 minutes time to send a query to the read side to get a list of hanging transactions (transaction not marked as completed, failed or rollback) and re-creates their transfer handler, each transfer handler uses its events to build its state and resumes from where it stopped. 
     
   ```
-  actorSystem.scheduler().scheduleOnce(Duration.ofMinutes(30), () -> account.walkBackInTime(), actorSystem.dispatcher());
+  getActorSystem()
+                  .scheduler()
+                  .scheduleOnce(
+                          Duration.ofMinutes(getActorSystem().settings().config().getInt("server.minutes-to-recreate-hanging-transactions")),
+                          () -> getAccount().walkBackInTime(), getActorSystem().dispatcher()
+                  );
 ```
 
 Inside the function that recreates the transfer handler
@@ -135,7 +140,7 @@ Inside the function that recreates the transfer handler
 Running
 ===
 
-Under the test folder, there is another package `integration_tests`, it contains the following classes
+Under the test folder, there is a package `integration_tests`, it contains the following classes
 - `AccountService`: Runs a single scenario of 5 requests, account 4 and 5 getting their balance, then transfer €10 from account 4 to 5, and finally account 4 and 5 getting their new balance and assert that its less and greater than their initial balance respectively
 - `MultipleTransferLoad`: Runs `AccountService` above 600 times by creating concurrent 300 users for `AccountService` within 100 seconds and looping twice, resulting in 3000 requests
 - `ConfirmTransferBalance`: Run a scenario of 2 requests, assert that account 4 has a balance of €4,000 and account 5 has a balance of €16,000
@@ -214,7 +219,7 @@ Usage
 Performance Testing
 ===
 
-Running the integration test above with generates a [zerocode csv](https://github.com/kiamesdavies/money-transfer/files/3625225/zerocode-junit-granular-report.xlsx) which was converted to generate the charts below
+Running the integration test above with Zerocode generated a [csv](https://github.com/kiamesdavies/money-transfer/files/3625225/zerocode-junit-granular-report.xlsx) which was imported to excel to generate the charts below
 
 <img width="886" alt="histo_chart" src="https://user-images.githubusercontent.com/3046068/65130853-27894300-d9f6-11e9-8c20-337395c298d7.png">
 <br/>
