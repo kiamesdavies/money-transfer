@@ -66,7 +66,7 @@ This is what **Akka** brings to the JVM, a simple and clear way to describe who 
 Lets first go through an ideal scenario of a user transferring €100 from account A to another account B, then we will explore other scenarios of system crash at different sections and their fault handling.
 
 ### Ideal Scenario
-<img width="858" alt="ideal" src="https://user-images.githubusercontent.com/3046068/65279482-3707a980-db26-11e9-827f-aeebff66f96b.png">
+<img width="847" alt="ideal" src="https://user-images.githubusercontent.com/3046068/65287933-dc2d7c80-db3c-11e9-8257-81b2ca04a635.png">
 <br/>
 <br/>
 The image above pretty explains it all.
@@ -77,13 +77,13 @@ The image above pretty explains it all.
 
 Crash at the sender's account
 <br/>
-<img width="612" alt="sender" src="https://user-images.githubusercontent.com/3046068/65279446-248d7000-db26-11e9-947e-48d03d81cf60.png"> 
+<img width="602" alt="sender" src="https://user-images.githubusercontent.com/3046068/65287920-cb7d0680-db3c-11e9-8ed7-e5e4127cf9a9.png">
 
 
 <br/>
 Crash at the receiver's account
 <br/>
-<img width="612" alt="receiver" src="https://user-images.githubusercontent.com/3046068/65279412-0d4e8280-db26-11e9-89fd-fa60177acb69.png">
+<img width="591" alt="receiver" src="https://user-images.githubusercontent.com/3046068/65287898-b607dc80-db3c-11e9-9db9-734b322aeed7.png">
 
 <br/>
 <br/>
@@ -137,7 +137,7 @@ Inside the function that recreates the transfer handler
 ### Rollback Process
 
 A typical rollback process
-<img  alt="rollback" width="858" src="https://user-images.githubusercontent.com/3046068/65279323-dd06e400-db25-11e9-9d9f-b9a5727700fd.png">   
+<img width="841" alt="rollback" src="https://user-images.githubusercontent.com/3046068/65287872-a092b280-db3c-11e9-9e74-f4d03b99f5a2.png">  
   
     
 Running
@@ -185,7 +185,7 @@ Usage
 <tbody>
 <tr>
 	<td><code>GET /account/{bankAccountId}</code></td>
-	<td>Get the account balance of the specified, as note above we have created accounts with ids `1, 2, 3, 4, 5` and `10` for rollback</td>
+	<td>Get the account balance of the specified bankAccountId, as note above we have created demo accounts with ids 1, 2, 3, 4, 5. 10 for rollback</td>
 	<td> </td>
 	<td>
       <pre>
