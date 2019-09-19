@@ -26,18 +26,22 @@ class TransferHandler extends AbstractPersistentActorWithAtLeastOnceDelivery {
     private final String transactionId;
 
     private final ActorRef bank;
+
     /**
      * Define behaviour of the handler while deducting money from the sender's account
      */
     private final AbstractActor.Receive debtor;
+
     /**
      * Define behaviour of the handler while crediting the receiver's account
      */
     private final AbstractActor.Receive creditor;
+
     /**
      * Define behaviour of the handler while performing a roll back
      */
     private final AbstractActor.Receive rollback;
+
     /**
      * Reference to api call that initiated the transfer
      */
@@ -47,7 +51,9 @@ class TransferHandler extends AbstractPersistentActorWithAtLeastOnceDelivery {
     /**
      * Reference to the sender's account
      */
+
     private ActorRef accountFrom;
+
     /**
      * Reference to the receiver's account
      */

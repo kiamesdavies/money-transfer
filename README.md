@@ -53,37 +53,37 @@ The project makes use of just one maven project with a root package `io.kiamesda
 - `models`: Contains events, commands and domain models used in the application
 - `services`: Contains the API and implementation for the Money Transfer.
 
-Quick glance, there are four classes *(DefaultAccount, TransferHandler, Bank, and BankAccount)* responsible for the majority of the functionalities in the system. 
+For a quick glance, there are four classes *(DefaultAccount, TransferHandler, Bank, and BankAccount)* responsible for the majority of the functionalities in the system. 
 
 
 Scenarios
 ===
 
-This project is based on the actor and let it crash model. Its almost impossible to build computer systems with the expectation or goal of it never crashing, there are several moving parts, rather build in fault handling and redundancy, and according to Murphy's law *"whatever can go wrong will go wrong"*.
+This project is based on the let it crash model. Its almost impossible to build computer systems with the expectation or goal of it never crashing, there are several moving parts, rather build in fault handling and redundancy, and according to Murphy's law *"whatever can go wrong will go wrong"*.
 
 This is what **Akka** brings to the JVM, a simple and clear way to describe who is responsible for fault handling (through supervision and monitoring actors)  and those responsible for the actual business logic. 
 
 Lets first go through an ideal scenario of a user transferring €100 from account A to another account B, then we will explore other scenarios of system crash at different sections and their fault handling.
 
 ### Ideal Scenario
-<img  alt="para yaml" width="837" src="https://user-images.githubusercontent.com/3046068/65124468-c14bf280-d9ec-11e9-9631-59e1f8724e9e.png">
+<img width="858" alt="ideal" src="https://user-images.githubusercontent.com/3046068/65279482-3707a980-db26-11e9-827f-aeebff66f96b.png">
 <br/>
 <br/>
 The image above pretty explains it all.
 
-**Note:** the server responds to the user that the transfer is complete while the deposit is ongoing, this is to reduce waiting time by the user, and for situations that require accessing external resources like transferring to another bank, this is one of the proper ways to go. 
+**Note:** the server responds to the user that the transfer is complete while crediting the recipient is ongoing, this is to reduce waiting time by the user, and for situations that require accessing external resources like transferring to another bank, this is one of the proper ways to go. 
 
-### Possible Real-life Scenario
+### Possible Real-life situations
 
 Crash at the sender's account
 <br/>
-<img  alt="rollback" width="600" src="https://user-images.githubusercontent.com/3046068/65185432-71f2da00-da5f-11e9-8aab-c5597323880d.png">  
+<img width="612" alt="sender" src="https://user-images.githubusercontent.com/3046068/65279446-248d7000-db26-11e9-947e-48d03d81cf60.png"> 
 
 
 <br/>
 Crash at the receiver's account
 <br/>
-<img  alt="rollback" width="600" src="https://user-images.githubusercontent.com/3046068/65185465-846d1380-da5f-11e9-9481-3c8a5ab738e7.png">  
+<img width="612" alt="receiver" src="https://user-images.githubusercontent.com/3046068/65279412-0d4e8280-db26-11e9-89fd-fa60177acb69.png">
 
 <br/>
 <br/>
@@ -113,10 +113,10 @@ This is fairly easy to resolve, every bank account is started with a supervisor,
     }
 ```
      
-Meanwhile the transfer handler keeps re-sending every 10 seconds *(configurable)* for 6 times*(configurable)*, if the bank account responds before the countdown ends, the normal process resumes, otherwise if it's in the first stage of withdrawal it marks the transaction as failed and return to the user else it starts a [rollback process](#rollback-process).
+Meanwhile the transfer handler keeps re-sending the command every 10 seconds *(configurable)* for 6 times*(configurable)*, if the bank account responds before the countdown ends, the normal process resumes, otherwise if it's in the first stage of withdrawal it marks the transaction as failed and return to the user else it starts a [rollback process](#rollback-process).
     
 ### The whole system crashes
-Whenever the server starts, it schedules a message after 30 minutes time to send a query to the read side to get a list of hanging transactions (transaction not marked as completed, failed or rollback) and re-creates their transfer handler, each transfer handler uses its events to build its state and resumes from where it stopped. 
+Whenever the server starts, it schedules a message after 30 minutes to query the read side, to get a list of hanging transactions (transaction not marked as completed, failed or rollback) and re-creates their transfer handler, each transfer handler uses its events to build its state and resumes from where it stopped. 
     
   ```
   getActorSystem()
@@ -136,7 +136,8 @@ Inside the function that recreates the transfer handler
 
 ### Rollback Process
 
-<img  alt="rollback" width="837" src="https://user-images.githubusercontent.com/3046068/65185253-11639d00-da5f-11e9-9e08-291bb3772658.png">   
+A typical rollback process
+<img  alt="rollback" width="858" src="https://user-images.githubusercontent.com/3046068/65279323-dd06e400-db25-11e9-9d9f-b9a5727700fd.png">   
   
     
 Running
@@ -156,12 +157,12 @@ To package the application without running the integration test
 Otherwise, you can package and run the integration test
 > mvn clean verify
 
-if the integration tests fail, it could be due to system resources, increase the execution time by setting `load_generation.properties/ramp.up.period.in.seconds` to 150 **or** run the application using any of the last two commands below then run the integration  tests separately in another terminal using 
+if the integration tests fail, it could be due to system resources, increase the execution time by setting `load_generation.properties/ramp.up.period.in.seconds` to 150/200 **or** run the executable using the command below then run the integration  tests separately in another terminal using 
 >  mvn -Dtest=CombinedTestSuiteIT test
 
 
 
-An executable jar file will be produced, to start the application run
+After packaging, an executable jar file will be produced, run with
 > java -jar ./target/money-transfer-1.0.jar
 
 Optionally you can run the project through maven
@@ -227,10 +228,12 @@ Running the integration test above with Zerocode generated a [csv](https://githu
 <br/>
 <br/>
 <img width="271" alt="summary" src="https://user-images.githubusercontent.com/3046068/65131158-a7171200-d9f6-11e9-9465-e498c9d02043.png">
+<br/>
+Note that this test was perfomred on my system with a more aggresive executuion time of 50 seconds 
 
 <br/>
 <br/>
-During the integrtion test profiled the  system using YourKit
+While running the integration test, the application  was profiled using YourKit
 <img width="800" alt="summary" src="https://user-images.githubusercontent.com/3046068/65132829-7684a780-d9f9-11e9-8c84-54c62119dd3d.png">
 
 77 MB out of the allocated 283 MB heap memory was used  for the 3002 requests

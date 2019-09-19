@@ -32,14 +32,14 @@ public class AccountController extends AllDirectives {
     }
 
     public Route createRoute() {
-        return pathPrefix(segment("account").slash(integerSegment()), accountFromId ->
+        return pathPrefix(segment("account").slash(segment()), accountFromId ->
                 pathEndOrSingleSlash(() ->
-                        get(() -> completeWithFuture(this.getBalance(accountFromId.toString()))))
-                        .orElse(pathPrefix(segment("transfer").slash(integerSegment()), accountToId ->
+                        get(() -> completeWithFuture(this.getBalance(accountFromId))))
+                        .orElse(pathPrefix(segment("transfer").slash(segment()), accountToId ->
 
                                         pathEndOrSingleSlash(() -> post(() ->
                                                 entity(Jackson.unmarshaller(MoneyTransfer.class),
-                                                        mock -> completeWithFuture(this.transfer(accountFromId.toString(), accountToId.toString(), mock)))
+                                                        mock -> completeWithFuture(this.transfer(accountFromId, accountToId, mock)))
                                         ))
                                 )
                         )
