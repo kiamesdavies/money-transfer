@@ -92,7 +92,7 @@ As shown in the images above, there are two points that a crash at the account l
 + Before persisting the withdrawal or deposit event
 + After persisting the event but before it can respond
 
-Two types of crashes can lead to any of the above are:
+The two types of crashes can lead to any of the above are:
 + The actor itself crashes (likely due to persistence failure)
 + The whole system crashes
 
@@ -113,7 +113,7 @@ This is fairly easy to resolve, every bank account is started with a supervisor,
     }
 ```
      
-Meanwhile the transfer handler keeps re-sending every 10 seconds *(configurable)* in 6 times*(configurable)*, if the bank account responds before the countdown ends, the normal process resumes, otherwise if it's in the first stage of withdrawal it marks the transaction as failed and return to the user else it starts a [rollback process](#rollback-process).
+Meanwhile the transfer handler keeps re-sending every 10 seconds *(configurable)* for 6 times*(configurable)*, if the bank account responds before the countdown ends, the normal process resumes, otherwise if it's in the first stage of withdrawal it marks the transaction as failed and return to the user else it starts a [rollback process](#rollback-process).
     
 ### The whole system crashes
 Whenever the server starts, it schedules a message after 30 minutes time to send a query to the read side to get a list of hanging transactions (transaction not marked as completed, failed or rollback) and re-creates their transfer handler, each transfer handler uses its events to build its state and resumes from where it stopped. 
