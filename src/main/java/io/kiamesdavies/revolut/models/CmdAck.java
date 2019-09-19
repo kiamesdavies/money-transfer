@@ -1,18 +1,19 @@
 package io.kiamesdavies.revolut.models;
 
 /**
- * Command Acknowledgement
+ * Command Acknowledgement.
  */
 public class CmdAck {
-    public final String deliveryId;
+    public final long deliveryId;
     public final Evt event;
 
-    public CmdAck(String deliveryId, Evt event) {
+    public CmdAck(long deliveryId, Evt event) {
         this.deliveryId = deliveryId;
         this.event = event;
     }
 
     public static CmdAck from(Cmd.BaseAccountCmd cmd, Evt evt) {
+
         return new CmdAck(cmd.deliveryId, evt);
     }
 

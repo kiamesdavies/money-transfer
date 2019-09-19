@@ -6,6 +6,7 @@ import akka.event.LoggingAdapter;
 import akka.http.javadsl.marshallers.jackson.Jackson;
 import akka.http.javadsl.model.ContentTypes;
 import akka.http.javadsl.model.HttpResponse;
+import akka.http.javadsl.model.StatusCodes;
 import akka.http.javadsl.server.AllDirectives;
 import akka.http.javadsl.server.Route;
 import io.kiamesdavies.revolut.commons.Utility;
@@ -31,17 +32,17 @@ public class AccountController extends AllDirectives {
     }
 
     public Route createRoute() {
-
-
         return pathPrefix(segment("account").slash(integerSegment()), accountFromId ->
-                pathEndOrSingleSlash(() -> get(() -> completeWithFuture(this.getBalance(accountFromId.toString())))).orElse(
-                        pathPrefix(segment("transfer").slash(integerSegment()), accountToId ->
+                pathEndOrSingleSlash(() ->
+                        get(() -> completeWithFuture(this.getBalance(accountFromId.toString()))))
+                        .orElse(pathPrefix(segment("transfer").slash(integerSegment()), accountToId ->
 
-                                pathEndOrSingleSlash(() -> post(() -> entity(Jackson.unmarshaller(MoneyTransfer.class),
-                                        mock -> completeWithFuture(this.transfer(accountFromId.toString(), accountToId.toString(), mock)))
-                                ))
+                                        pathEndOrSingleSlash(() -> post(() ->
+                                                entity(Jackson.unmarshaller(MoneyTransfer.class),
+                                                        mock -> completeWithFuture(this.transfer(accountFromId.toString(), accountToId.toString(), mock)))
+                                        ))
+                                )
                         )
-                )
         ).orElse(get(() -> complete("welcome")));
     }
 
@@ -51,12 +52,12 @@ public class AccountController extends AllDirectives {
             HttpResponse response = HttpResponse.create();
             if (g instanceof TransactionResult.Success) {
                 TransactionResult.Success result = (TransactionResult.Success) g;
-                return response.withStatus(200).withEntity(ContentTypes.APPLICATION_JSON, Utility.toBytes(result));
+                return response.withStatus(StatusCodes.OK).withEntity(ContentTypes.APPLICATION_JSON, Utility.toBytes(result));
             } else {
                 Throwable f = ((TransactionResult.Failure) g).exception;
-                response = response.withEntity(Objects.toString(f.getMessage(), "")).withStatus(400);
+                response = response.withEntity(Objects.toString(f.getMessage(), "")).withStatus(StatusCodes.BAD_REQUEST);
                 if (f instanceof AccountNotFoundException) {
-                    response = response.withStatus(404);
+                    response = response.withStatus(StatusCodes.NOT_FOUND);
                 }
             }
             return response;
@@ -66,9 +67,9 @@ public class AccountController extends AllDirectives {
 
     private CompletionStage<HttpResponse> getBalance(String accountFromId) {
         return account.getBalance(accountFromId)
-                .thenApply(h -> HttpResponse.create().withStatus(200).withEntity(ContentTypes.APPLICATION_JSON, Utility.toBytes(h)))
+                .thenApply(h -> HttpResponse.create().withStatus(StatusCodes.OK).withEntity(ContentTypes.APPLICATION_JSON, Utility.toBytes(h)))
                 .exceptionally(g -> HttpResponse.create()
-                        .withStatus(404)
+                        .withStatus(StatusCodes.NOT_FOUND)
                         .withEntity(Objects.toString((g.getCause() != null ? g.getCause() : g).getMessage(), "")));
     }
 

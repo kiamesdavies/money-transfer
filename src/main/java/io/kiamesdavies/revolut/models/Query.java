@@ -7,11 +7,11 @@ public class Query {
 
 
     public static class Single {
-        public final String deliveryId;
+        public final long deliveryId;
         public final String bankAccountId;
 
 
-        public Single(String deliveryId, String bankAccountId) {
+        public Single(long deliveryId, String bankAccountId) {
             this.deliveryId = deliveryId;
             this.bankAccountId = bankAccountId;
         }
@@ -19,11 +19,11 @@ public class Query {
     }
 
     public static class Multiple {
-        public final String deliveryId;
+        public final long deliveryId;
         public final String[] bankAccountIds;
 
 
-        public Multiple(String deliveryId, String... bankAccountIds) {
+        public Multiple(long deliveryId, String... bankAccountIds) {
             this.deliveryId = deliveryId;
             this.bankAccountIds = bankAccountIds;
         }

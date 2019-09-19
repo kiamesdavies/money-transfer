@@ -1,7 +1,7 @@
 package io.kiamesdavies.revolut.services;
 
 import akka.testkit.javadsl.TestKit;
-import io.kiamesdavies.revolut.Bootstrap;
+import io.kiamesdavies.revolut.Inflation;
 import io.kiamesdavies.revolut.exceptions.AccountNotFoundException;
 import io.kiamesdavies.revolut.exceptions.InsufficientFundsException;
 import io.kiamesdavies.revolut.models.AccountBalance;
@@ -21,18 +21,18 @@ import static org.hamcrest.Matchers.instanceOf;
 public class AccountTest {
 
     private static Account account;
-    private static Bootstrap instance;
+    private static Inflation instance;
 
     @BeforeAll
     static void setup() {
-        instance = Bootstrap.getInstance();
-        account = instance.account;
+        instance = Inflation.getInstance();
+        account = instance.getAccount();
     }
 
     @AfterAll
     static void teardown() {
         instance.terminate();
-        TestKit.shutdownActorSystem(instance.actorSystem);
+        TestKit.shutdownActorSystem(instance.getActorSystem());
     }
 
     @Test

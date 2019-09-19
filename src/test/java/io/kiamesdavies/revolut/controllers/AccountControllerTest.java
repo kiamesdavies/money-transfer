@@ -6,7 +6,7 @@ import akka.http.javadsl.model.HttpRequest;
 import akka.http.javadsl.testkit.JUnitRouteTest;
 import akka.http.javadsl.testkit.TestRoute;
 import akka.stream.ActorMaterializer;
-import io.kiamesdavies.revolut.Bootstrap;
+import io.kiamesdavies.revolut.Inflation;
 import io.kiamesdavies.revolut.commons.Utility;
 import io.kiamesdavies.revolut.models.MoneyTransfer;
 import org.junit.jupiter.api.AfterAll;
@@ -20,12 +20,12 @@ import java.util.concurrent.TimeUnit;
 public class AccountControllerTest extends JUnitRouteTest {
 
 
-    private static Bootstrap instance;
-    private TestRoute appRoute = testRoute(instance.route);
+    private static Inflation instance;
+    private TestRoute appRoute = testRoute(instance.getRoute());
 
     @BeforeAll
     static void setup() {
-        instance = Bootstrap.getInstance();
+        instance = Inflation.getInstance();
 
     }
 
@@ -97,11 +97,11 @@ public class AccountControllerTest extends JUnitRouteTest {
     }
 
     public ActorMaterializer materializer() {
-        return instance.materializer;
+        return instance.getMaterializer();
     }
 
     public ActorSystem system() {
-        return instance.actorSystem;
+        return instance.getActorSystem();
     }
 
     @Override

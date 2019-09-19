@@ -42,7 +42,7 @@ class TransferHandler extends AbstractPersistentActorWithAtLeastOnceDelivery {
                 .match(CmdAck.class, f -> f.event instanceof Evt.DepositEvent, j -> {
                     log.info("Rolling back transaction {}", state);
                     persist(state.with(TransactionStatus.ROLLBACK), a -> {
-                                confirmDelivery(Long.valueOf(j.deliveryId));
+                                confirmDelivery(j.deliveryId);
                                 self().tell(PoisonPill.getInstance(), ActorRef.noSender());
                             }
                     );
@@ -51,7 +51,7 @@ class TransferHandler extends AbstractPersistentActorWithAtLeastOnceDelivery {
                     log.error("Rollback to account {} failed to respond after {} trials for {} will try again in 5 minutes ", accountTo, warnAfterNumberOfUnconfirmedAttempts(), state);
                     getContext().system().scheduler().scheduleOnce(
                             Duration.ofMinutes(5),
-                            () -> deliver(accountFrom.path(), deliveryId -> new Cmd.DepositCmd(deliveryId.toString(), transactionId + "-rollback", state.getAccountFromId(), state.getAmount())), getContext().getDispatcher());
+                            () -> deliver(accountFrom.path(), deliveryId -> new Cmd.DepositCmd(deliveryId, transactionId + "-rollback", state.getAccountFromId(), state.getAmount())), getContext().getDispatcher());
                 })
                 .matchAny(f -> log.error("Unattended Message {} at state {}", f, state))
                 .build();
@@ -66,26 +66,26 @@ class TransferHandler extends AbstractPersistentActorWithAtLeastOnceDelivery {
                         getContext().become(rollback);
                         //the transactionId has been marked as worked on by the account so "-rollback" is attached to differentiate it
                         //note that the read side is required to remove the  "-rollback" text before saving it
-                        deliver(accountFrom.path(), deliveryId -> new Cmd.DepositCmd(deliveryId.toString(), transactionId + "-rollback", state.getAccountFromId(), state.getAmount()));
+                        deliver(accountFrom.path(), deliveryId -> new Cmd.DepositCmd(deliveryId, transactionId + "-rollback", state.getAccountFromId(), state.getAmount()));
                     });
                 })
                 .match(CmdAck.class, f -> f.event instanceof Evt.FailedEvent, j -> {
                     log.error("Failed to creditor {} due to {} will attempt rollback", state, j.event);
                     //rollback
                     persist(state.with(TransactionStatus.DEPOSIT_FAILED), a -> {
-                        confirmDelivery(Long.valueOf(j.deliveryId));
+                        confirmDelivery(j.deliveryId);
                         state = a;
                         getContext().become(rollback);
                         //the transactionId has been flagged by the sender's account so "-rollback" is attached to differentiate it
                         //note that the read side is required to remove the  "-rollback" text before saving to its own store
-                        deliver(accountFrom.path(), deliveryId -> new Cmd.DepositCmd(deliveryId.toString(), transactionId + "-rollback", state.getAccountFromId(), state.getAmount()));
+                        deliver(accountFrom.path(), deliveryId -> new Cmd.DepositCmd(deliveryId, transactionId + "-rollback", state.getAccountFromId(), state.getAmount()));
                     });
 
 
                 })
                 .match(CmdAck.class, f -> f.event instanceof Evt.DepositEvent, j ->
                         persist(state.with(TransactionStatus.COMPLETED), a -> {
-                            confirmDelivery(Long.valueOf(j.deliveryId));
+                            confirmDelivery(j.deliveryId);
                             self().tell(PoisonPill.getInstance(), ActorRef.noSender());
                         })
                 )
@@ -108,7 +108,7 @@ class TransferHandler extends AbstractPersistentActorWithAtLeastOnceDelivery {
                 .match(CmdAck.class, f -> f.event instanceof Evt.FailedEvent, j -> {
                     log.error("Failed for debtor {} due to {}", state, j.event);
                     persist(state.with(TransactionStatus.FAILED), a -> {
-                        confirmDelivery(Long.valueOf(j.deliveryId));
+                        confirmDelivery(j.deliveryId);
                         if (initiator != null) {
                             Evt.FailedEvent failedEvent = (Evt.FailedEvent) j.event;
                             initiator.tell(
@@ -119,10 +119,10 @@ class TransferHandler extends AbstractPersistentActorWithAtLeastOnceDelivery {
                 })
                 .match(CmdAck.class, f -> f.event instanceof Evt.WithdrawEvent, j ->
                         persist(state.with(TransactionStatus.WITHDRAWN), g -> {
-                            confirmDelivery(Long.valueOf(j.deliveryId));
+                            confirmDelivery(j.deliveryId);
                             state = g;
                             getContext().become(creditor);
-                            deliver(accountTo.path(), deliveryId -> new Cmd.DepositCmd(deliveryId.toString(), state.getTransactionId(), state.getAccountToId(), state.getAmount()));
+                            deliver(accountTo.path(), deliveryId -> new Cmd.DepositCmd(deliveryId, state.getTransactionId(), state.getAccountToId(), state.getAmount()));
                             if (initiator != null) {
                                 initiator.tell(new TransactionResult.Success(transactionId), self());
                             }
@@ -156,16 +156,16 @@ class TransferHandler extends AbstractPersistentActorWithAtLeastOnceDelivery {
 
                 })
                 .match(QueryAck.class, d -> d.response instanceof Map, f -> {
-                    confirmDelivery(Long.valueOf(f.deliveryId));
+                    confirmDelivery(f.deliveryId);
                     Map<String, Query.BankReference> response = (Map<String, Query.BankReference>) f.response;
                     accountFrom = response.get(state.getAccountFromId()).bankAccount;
                     accountTo = response.get(state.getAccountToId()).bankAccount;
                     if (TransactionStatus.NEW.equals(state.getStatus())) {
                         getContext().become(debtor);
-                        deliver(accountFrom.path(), deliveryId -> new Cmd.WithdrawCmd(deliveryId.toString(), state.getTransactionId(), state.getAccountFromId(), state.getAmount()));
+                        deliver(accountFrom.path(), deliveryId -> new Cmd.WithdrawCmd(deliveryId, state.getTransactionId(), state.getAccountFromId(), state.getAmount()));
                     } else if (TransactionStatus.WITHDRAWN.equals(state.getStatus()) || TransactionStatus.DEPOSIT_FAILED.equals(state.getStatus())) {
                         getContext().become(creditor);
-                        deliver(accountTo.path(), deliveryId -> new Cmd.DepositCmd(deliveryId.toString(), state.getTransactionId(), state.getAccountToId(), state.getAmount()));
+                        deliver(accountTo.path(), deliveryId -> new Cmd.DepositCmd(deliveryId, state.getTransactionId(), state.getAccountToId(), state.getAmount()));
                     } else {
                         log.warning("A completed transaction {} try to restart, am going to kill myself now", state);
                         self().tell(PoisonPill.getInstance(), ActorRef.noSender());
@@ -174,7 +174,7 @@ class TransferHandler extends AbstractPersistentActorWithAtLeastOnceDelivery {
                 .match(QueryAck.class, d -> d.response instanceof Query.QueryAckNotFound, j -> {
                     if (TransactionStatus.NEW.equals(state.getStatus())) {
                         persist(state.with(TransactionStatus.FAILED), a -> {
-                            confirmDelivery(Long.valueOf(j.deliveryId));
+                            confirmDelivery(j.deliveryId);
                             if (initiator != null) {
                                 Query.QueryAckNotFound queryAckNotFound = (Query.QueryAckNotFound) j.response;
                                 initiator.tell(new TransactionResult.Failure(new AccountNotFoundException(String.format("%s not found", queryAckNotFound.bankAccountId))), self());
@@ -182,7 +182,7 @@ class TransferHandler extends AbstractPersistentActorWithAtLeastOnceDelivery {
                             self().tell(PoisonPill.getInstance(), ActorRef.noSender());
                         });
                     } else {
-                        confirmDelivery(Long.valueOf(j.deliveryId));
+                        confirmDelivery(j.deliveryId);
                         if (initiator != null) {
                             Query.QueryAckNotFound queryAckNotFound = (Query.QueryAckNotFound) j.response;
                             initiator.tell(new TransactionResult.Failure(new IllegalArgumentException(String.format("%s not found", queryAckNotFound.bankAccountId))), self());
@@ -224,7 +224,7 @@ class TransferHandler extends AbstractPersistentActorWithAtLeastOnceDelivery {
     private void startTransfer(Evt.TransactionEvent transactionEvent, boolean checkForRecovery) {
         state = transactionEvent;
         //get bank references
-        Runnable run  = () ->  deliver(bank.path(), (deliveryId) -> new Query.Multiple(deliveryId.toString(), transactionEvent.getAccountFromId(), transactionEvent.getAccountToId()));
+        Runnable run  = () ->  deliver(bank.path(), (deliveryId) -> new Query.Multiple(deliveryId, transactionEvent.getAccountFromId(), transactionEvent.getAccountToId()));
 
         if(!checkForRecovery){
             run.run();
@@ -232,7 +232,7 @@ class TransferHandler extends AbstractPersistentActorWithAtLeastOnceDelivery {
         else if (checkForRecovery && recoveryFinished()) {
             //wait for other messages that were sent before starting the process of transfer
             getContext().system().scheduler().scheduleOnce(
-                    Duration.ofSeconds(redeliverInterval().toSeconds()*warnAfterNumberOfUnconfirmedAttempts()),
+                    Duration.ofSeconds(redeliverInterval().toSeconds() * warnAfterNumberOfUnconfirmedAttempts()),
                     run,
                     getContext().getDispatcher());
         }

@@ -6,20 +6,23 @@ import akka.http.javadsl.server.Route;
 import java.util.concurrent.ExecutionException;
 
 /**
- * Creation of this universe
+ * Creation of this universe.
  */
 public class BigBang extends HttpApp {
 
-    private final Bootstrap instance;
+
+    private final Inflation instance;
 
     public BigBang() {
-        instance = Bootstrap.getInstance();
+        instance = Inflation.getInstance();
     }
 
     public static void main(String[] args) throws ExecutionException, InterruptedException {
         BigBang bigBang = new BigBang();
 
-        bigBang.startServer("0.0.0.0", 9099, bigBang.instance.actorSystem);
+        bigBang.startServer("0.0.0.0",
+                bigBang.instance.getActorSystem().settings().config().getInt("http.port"),
+                bigBang.instance.getActorSystem());
     }
 
 
@@ -28,6 +31,6 @@ public class BigBang extends HttpApp {
      */
     @Override
     protected Route routes() {
-        return instance.route;
+        return instance.getRoute();
     }
 }

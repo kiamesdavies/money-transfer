@@ -22,7 +22,7 @@ import static io.kiamesdavies.revolut.models.Evt.FailedEvent.Type.INSUFFICIENT_F
 import static io.kiamesdavies.revolut.models.Evt.FailedEvent.Type.INVALID_AMOUNT;
 
 /**
- * Represents a single user bank account
+ * Represents a single user bank account.
  */
 public class BankAccount extends AbstractPersistentActorWithTimers {
 
@@ -32,12 +32,13 @@ public class BankAccount extends AbstractPersistentActorWithTimers {
     private final int snapShotInterval = 100;
     private AccountBalance state;
     private Map<String, LocalDateTime> receivedCmds = new HashMap<>();
-
+    private final int hoursToKeepTransactions;
 
     public BankAccount(String bankAccountId) {
         this.bankAccountId = bankAccountId;
-        state = new AccountBalance(bankAccountId, BigDecimal.valueOf(10000));
-        timers().startPeriodicTimer(new ReceivedCmdCleanUp(), new ReceivedCmdCleanUp(), Duration.ofHours(6));
+        state = new AccountBalance(bankAccountId, BigDecimal.valueOf(getContext().system().settings().config().getDouble("account.opening-account")));
+        hoursToKeepTransactions = getContext().system().settings().config().getInt("account.hours-to-keep-transactions");
+        timers().startPeriodicTimer(new ReceivedCmdCleanUp(), new ReceivedCmdCleanUp(), Duration.ofHours(hoursToKeepTransactions));
     }
 
 
@@ -55,14 +56,17 @@ public class BankAccount extends AbstractPersistentActorWithTimers {
         return receiveBuilder()
                 .match(Query.Single.class, s -> sender().tell(new QueryAck(s.deliveryId, state.copy()), self()))
                 .match(Cmd.BaseAccountCmd.class, s -> s.amount.compareTo(BigDecimal.ZERO) < 1,
-                        f -> sender().tell(CmdAck.from(f, new Evt.FailedEvent(bankAccountId, INVALID_AMOUNT, "Amount is too small")), self()))
+                        f -> sender().tell(
+                                CmdAck.from(f, new Evt.FailedEvent(bankAccountId, INVALID_AMOUNT, "Amount is too small")),
+                                self())
+                )
                 .match(Cmd.WithdrawCmd.class, s -> s.amount.compareTo(state.getBalance()) > 0,
                         f -> sender().tell(CmdAck.from(f, new Evt.FailedEvent(bankAccountId, INSUFFICIENT_FUNDS)), self()))
                 .match(Cmd.BaseAccountCmd.class, this::handleCmd)
                 .match(ReceivedCmdCleanUp.class, f -> {
                     //the map was re-created to reset the bucket size instead of just removing the entries
                     receivedCmds = receivedCmds.entrySet().stream()
-                            .filter(g -> g.getValue().isAfter(LocalDateTime.now().minusHours(6)))
+                            .filter(g -> g.getValue().isAfter(LocalDateTime.now().minusHours(hoursToKeepTransactions)))
                             .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
                 })
                 .matchAny(f -> log.error("Unattended Message {}", f))
@@ -88,7 +92,6 @@ public class BankAccount extends AbstractPersistentActorWithTimers {
         } else {
             persist(evt,
                     (Evt.BaseAccountEvt e) -> {
-
                         this.update(e);
                         sender().tell(CmdAck.from(c, e), self());
                         if (lastSequenceNr() % snapShotInterval == 0 && lastSequenceNr() != 0) {
@@ -98,7 +101,7 @@ public class BankAccount extends AbstractPersistentActorWithTimers {
         }
     }
 
-    private static class ReceivedCmdCleanUp {
+    private static final class ReceivedCmdCleanUp {
     }
 
 

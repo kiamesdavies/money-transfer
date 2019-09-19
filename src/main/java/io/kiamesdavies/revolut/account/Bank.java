@@ -12,7 +12,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
- * This is responsible for managing the bank accounts in the application
+ * This is responsible for managing the bank accounts in the application.
  */
 public class Bank extends AbstractLoggingActor {
 
@@ -20,7 +20,7 @@ public class Bank extends AbstractLoggingActor {
     private final Map<String, ActorRef> bankAccounts;
 
 
-    public Bank(Map<String, ActorRef> bankAccounts) {
+    public Bank(final Map<String, ActorRef> bankAccounts) {
         this.bankAccounts = bankAccounts;
     }
 
@@ -40,13 +40,17 @@ public class Bank extends AbstractLoggingActor {
                         s -> sender().tell(new QueryAck(s.deliveryId, new Query.QueryAckNotFound(s.bankAccountId)), self()))
                 .match(Query.Single.class, s -> bankAccounts.containsKey(s.bankAccountId),
                         s -> sender().tell(
-                                new QueryAck(s.deliveryId, new Query.BankReference(s.bankAccountId, bankAccounts.get(s.bankAccountId))), self()))
+                                new QueryAck(s.deliveryId, new Query.BankReference(s.bankAccountId, bankAccounts.get(s.bankAccountId))),
+                                self())
+                )
                 .match(Query.Multiple.class, g -> {
                     Optional<String> notFoundBank = Arrays.stream(g.bankAccountIds).filter(f -> !bankAccounts.containsKey(f)).findFirst();
                     if (notFoundBank.isPresent()) {
-                        sender().tell(new QueryAck(g.deliveryId, new Query.QueryAckNotFound(notFoundBank.get())), self());
+                        sender().tell(new QueryAck(g.deliveryId, new Query.QueryAckNotFound(notFoundBank.get())),
+                                self());
                     } else {
-                        Map<String, Query.BankReference> response = Arrays.stream(g.bankAccountIds).collect(Collectors.toMap(j -> j, j -> new Query.BankReference(j, bankAccounts.get(j)), (p, q) -> p));
+                        Map<String, Query.BankReference> response = Arrays.stream(g.bankAccountIds)
+                                .collect(Collectors.toMap(j -> j, j -> new Query.BankReference(j, bankAccounts.get(j)), (p, q) -> p));
                         sender().tell(new QueryAck(g.deliveryId, response), self());
                     }
                 })

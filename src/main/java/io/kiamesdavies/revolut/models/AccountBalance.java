@@ -9,17 +9,17 @@ public class AccountBalance implements Serializable {
     private String bankAccountId;
     private BigDecimal balance;
 
-    public AccountBalance(String bankAccountId, BigDecimal balance) {
+    public AccountBalance(final String bankAccountId, final BigDecimal balance) {
         this.balance = balance;
         this.bankAccountId = bankAccountId;
     }
 
-    public static AccountBalance deposit(AccountBalance account, BigDecimal amount) {
+    public static AccountBalance deposit(final AccountBalance account, BigDecimal amount) {
         account.balance = account.balance.add(amount);
         return account;
     }
 
-    public static AccountBalance withdraw(AccountBalance account, BigDecimal amount) {
+    public static AccountBalance withdraw(final AccountBalance account, BigDecimal amount) {
         account.balance = account.balance.subtract(amount);
         return account;
     }

@@ -1,6 +1,6 @@
 ## Revolut Money Transfer API with Event Sourcing and CQRS
 
-This project facilitates the transfer of money between two demo accounts.
+This project facilitates the transfer of money between two accounts.
 
 Table of Contents
 ===
@@ -19,7 +19,7 @@ Table of Contents
 Introduction
 ===
 
-The purpose of this project is to build a high-quality money transfer API. This is a demo project but proposes an architecture that can be used in a production environment. The following technologies are used:
+The purpose of this project is to build a high-quality money transfer API. This is a demo project but with production environment architecture in mind. The following technologies are used:
 
 - `H2`: An in-memory database
 - `Akka and Akka Persistence`: For event sourcing, message delivery and concurrency 
@@ -32,7 +32,7 @@ Since the primary aim of this system is to demo a money transfer API, the follow
 
 + A default currency of euros is used, so no currency conversion or any other currency feature were built into the system.
 + No provision for creating bank accounts, so five bank accounts (with ids `1, 2, 3, 4, 5`) are created by default each with a balance of *10,000*. In this universe, that's your opening balance with Revolut. :smile:
-+ Another bank account with an id of `10` was created as well, to demonstrate rollback and unavailability.
++ Another bank account with an id of `10` was created as well, to demonstrate rollback and unavailability. You can transfer to this account to see how rollback works.
 
 Why Event Sourcing and CQRS
 ===
@@ -111,7 +111,7 @@ This is fairly easy to resolve, every bank account is started with a supervisor,
     }
 ```
      
-Meanwhile the transfer handler keeps re-sending the  command 6 times *(configurable)* every 10 seconds *(configurable)*  if the bank account responds before the count down, the normal process resumes, otherwise if it's in the first stage of withdrawal it marks the transaction as failed and return to the user else it starts a rollback as shown in the image below.
+Meanwhile the transfer handler keeps re-sending the  command 6 times *(configurable)* every 10 seconds *(configurable)*  if the bank account responds before the count down, the normal process resumes, otherwise if it's in the first stage of withdrawal it marks the transaction as failed and return to the user else it starts a [rollback process](#rollback-process).
     
 ### The whole system crashes
 After the servers, it schedules a message in 30 minutes time to send a query to the read side to get a list of hanging transactions (transaction not marked as completed, failed or rollback) and re-creates their transfer handler, each transfer handler uses its events to build its state and resumes from where it stopped. 
@@ -149,12 +149,12 @@ To package the application without running the integration test
 Otherwise, you can package and run the integration test
 > mvn clean verify
 
-if the integration tests fail, it could be due to your system resources, package the application then run the application using any of the commands below then run test separately in another terminal using 
+if the integration tests fail, it could be due to system resources, increase the execution time by setting `load_generation.properties/ramp.up.period.in.seconds` to 150 **or** run the application using any of the last two commands below then run the integration  tests separately in another terminal using 
 >  mvn -Dtest=CombinedTestSuiteIT test
 
 
 
-An executable jar file will be produced, then run to start the application
+An executable jar file will be produced, to start the application run
 > java -jar ./target/money-transfer-1.0.jar
 
 Optionally you can run the project through maven
@@ -176,8 +176,8 @@ Usage
 </thead>
 <tbody>
 <tr>
-	<td><code>GET /account/{id}</code></td>
-	<td>Get the account balance of the specified</td>
+	<td><code>GET /account/{bankAccountId}</code></td>
+	<td>Get the account balance of the specified, as note above we have created accounts with ids `1, 2, 3, 4, 5` and `10` for rollback</td>
 	<td> </td>
 	<td>
       <pre>
@@ -189,13 +189,13 @@ Usage
     </td>
 </tr>
 <tr>
-	<td><code>POST /account/{accountFromId}/tranfer/{accountToId}</code></td>
-	<td>Transfer amount from accountFromId to accountToId</td>
+	<td><code>POST /account/{bankAccountId}/tranfer/{receipientAccId}</code></td>
+	<td>Transfer amount from bankAccountId to receipientAccId</td>
 	<td>
 	{
      "amount": "double",
-     "remarks": "string",
-     "source":"string"
+     "remarks": "string optional",
+     "source":"string optional"
     }
 	</td>
 	<td>

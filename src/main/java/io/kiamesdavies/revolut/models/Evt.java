@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 
 /**
- * An Event class
+ * The base Event class.
  */
 public abstract class Evt implements Serializable {
     static final long serialVersionUID = 42L;
@@ -16,14 +16,16 @@ public abstract class Evt implements Serializable {
         private String transactionId;
         private long messageNanoTime;
 
+
+
+        BaseAccountEvt() {
+        }
+
         BaseAccountEvt(String bankAccountId, String transactionId, BigDecimal amount) {
             this.setBankAccountId(bankAccountId);
             this.transactionId = transactionId;
             this.setAmount(amount);
             messageNanoTime = System.nanoTime();
-        }
-
-        BaseAccountEvt() {
         }
 
 
@@ -60,7 +62,7 @@ public abstract class Evt implements Serializable {
         }
     }
 
-    public final static class DepositEvent extends BaseAccountEvt {
+    public static final class DepositEvent extends BaseAccountEvt {
 
         DepositEvent() {
 
@@ -76,7 +78,7 @@ public abstract class Evt implements Serializable {
         }
     }
 
-    public final static class WithdrawEvent extends BaseAccountEvt {
+    public static final class WithdrawEvent extends BaseAccountEvt {
 
         WithdrawEvent() {
 
@@ -92,7 +94,7 @@ public abstract class Evt implements Serializable {
         }
     }
 
-    public final static class FailedEvent extends Evt {
+    public static final class FailedEvent extends Evt {
 
 
         private String bankAccountId;
@@ -112,17 +114,6 @@ public abstract class Evt implements Serializable {
             this(bankAccountId, type, null);
         }
 
-        @Override
-
-
-        public String toString() {
-            return "FailedEvent{" +
-                    "bankAccountIds='" + getBankAccountId() + '\'' +
-                    ", type=" + getType() +
-                    ", additionalDescription='" + getAdditionalDescription() + '\'' +
-                    '}';
-        }
-
         public String getBankAccountId() {
             return bankAccountId;
         }
@@ -139,10 +130,19 @@ public abstract class Evt implements Serializable {
             INSUFFICIENT_FUNDS,
             INVALID_AMOUNT
         }
+
+        @Override
+        public String toString() {
+            return "FailedEvent{" +
+                    "bankAccountIds='" + getBankAccountId() + '\'' +
+                    ", type=" + getType() +
+                    ", additionalDescription='" + getAdditionalDescription() + '\'' +
+                    '}';
+        }
     }
 
 
-    public final static class TransactionEvent extends Evt {
+    public static final class TransactionEvent extends Evt {
         private String transactionId;
         private BigDecimal amount;
         private String remarks;

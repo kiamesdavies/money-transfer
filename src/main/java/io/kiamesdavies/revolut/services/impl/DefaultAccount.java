@@ -10,10 +10,7 @@ import io.kiamesdavies.revolut.models.*;
 import io.kiamesdavies.revolut.services.Account;
 
 import java.time.Duration;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.CompletionException;
 import java.util.concurrent.CompletionStage;
 
@@ -23,6 +20,7 @@ public class DefaultAccount implements Account {
 
     private final ActorRef bank;
     private final ActorSystem actorSystem;
+    private final static  Random RANDOM = new Random();
 
     public DefaultAccount(ActorSystem actorSystem, ActorRef bank) {
         this.actorSystem = actorSystem;
@@ -65,13 +63,14 @@ public class DefaultAccount implements Account {
      */
     @Override
     public CompletionStage<AccountBalance> getBalance(String bankAccountId) {
-        return Patterns.ask(bank, new Query.Single(UUID.randomUUID().toString(), bankAccountId), Duration.ofSeconds(3))
+
+        return Patterns.ask(bank, new Query.Single(RANDOM.nextLong(), bankAccountId), Duration.ofSeconds(3))
                 .thenCompose(f -> {
                     if (f instanceof Query.QueryAckNotFound) {
                         throw new CompletionException(new AccountNotFoundException(String.format("bank account %s not found", bankAccountId)));
                     }
                     Query.BankReference bankReference = (Query.BankReference) ((QueryAck) f).response;
-                    return Patterns.ask(bankReference.bankAccount, new Query.Single(UUID.randomUUID().toString(), bankAccountId), Duration.ofSeconds(5)).thenApply(g -> {
+                    return Patterns.ask(bankReference.bankAccount, new Query.Single(RANDOM.nextLong(), bankAccountId), Duration.ofSeconds(5)).thenApply(g -> {
                         if (g instanceof Query.QueryAckNotFound) {
                             log.error("Account {} failed to respond bank account = id {}", bankReference, bankAccountId);
                             throw new CompletionException(new IllegalStateException(String.format("bank account %s not found", bankAccountId)));
