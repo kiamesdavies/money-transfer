@@ -76,11 +76,13 @@ The image above pretty explains it all.
 ### Possible Real-life Scenario
 
 Crash at the sender's account
+<br/>
 <img  alt="rollback" width="600" src="https://user-images.githubusercontent.com/3046068/65185432-71f2da00-da5f-11e9-8aab-c5597323880d.png">  
 
 
 <br/>
 Crash at the receiver's account
+<br/>
 <img  alt="rollback" width="600" src="https://user-images.githubusercontent.com/3046068/65185465-846d1380-da5f-11e9-9481-3c8a5ab738e7.png">  
 
 <br/>
