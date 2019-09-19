@@ -48,10 +48,12 @@ class TransferHandler extends AbstractPersistentActorWithAtLeastOnceDelivery {
                     );
                 })
                 .match(AtLeastOnceDelivery.UnconfirmedWarning.class, j -> {
-                    log.error("Rollback to account {} failed to respond after {} trials for {} will try agian ", accountTo, warnAfterNumberOfUnconfirmedAttempts(), state);
-                    deliver(accountFrom.path(), deliveryId -> new Cmd.DepositCmd(deliveryId.toString(), transactionId + "-rollback", state.getAccountFromId(), state.getAmount()));
+                    log.error("Rollback to account {} failed to respond after {} trials for {} will try again in 5 minutes ", accountTo, warnAfterNumberOfUnconfirmedAttempts(), state);
+                    getContext().system().scheduler().scheduleOnce(
+                            Duration.ofMinutes(5),
+                            () -> deliver(accountFrom.path(), deliveryId -> new Cmd.DepositCmd(deliveryId.toString(), transactionId + "-rollback", state.getAccountFromId(), state.getAmount())), getContext().getDispatcher());
                 })
-                .matchAny(f -> log.error("Unattended Message {}", f))
+                .matchAny(f -> log.error("Unattended Message {} at state {}", f, state))
                 .build();
 
         creditor = receiveBuilder()
@@ -60,6 +62,7 @@ class TransferHandler extends AbstractPersistentActorWithAtLeastOnceDelivery {
                     //rollback
                     persist(state.with(TransactionStatus.DEPOSIT_FAILED), a -> {
                         j.getUnconfirmedDeliveries().forEach(g -> confirmDelivery(g.deliveryId()));
+                        state = a;
                         getContext().become(rollback);
                         //the transactionId has been marked as worked on by the account so "-rollback" is attached to differentiate it
                         //note that the read side is required to remove the  "-rollback" text before saving it
@@ -71,9 +74,10 @@ class TransferHandler extends AbstractPersistentActorWithAtLeastOnceDelivery {
                     //rollback
                     persist(state.with(TransactionStatus.DEPOSIT_FAILED), a -> {
                         confirmDelivery(Long.valueOf(j.deliveryId));
+                        state = a;
                         getContext().become(rollback);
-                        //the transactionId has been marked as worked on by the account so "-rollback" is attached to differentiate it
-                        //note that the read side is required to remove the  "-rollback" text before saving it
+                        //the transactionId has been flagged by the sender's account so "-rollback" is attached to differentiate it
+                        //note that the read side is required to remove the  "-rollback" text before saving to its own store
                         deliver(accountFrom.path(), deliveryId -> new Cmd.DepositCmd(deliveryId.toString(), transactionId + "-rollback", state.getAccountFromId(), state.getAmount()));
                     });
 
@@ -85,7 +89,7 @@ class TransferHandler extends AbstractPersistentActorWithAtLeastOnceDelivery {
                             self().tell(PoisonPill.getInstance(), ActorRef.noSender());
                         })
                 )
-                .matchAny(f -> log.error("Unattended Message {}", f))
+                .matchAny(f -> log.error("Unattended Message {} at state {}", f, state))
                 .build();
 
 
@@ -102,7 +106,7 @@ class TransferHandler extends AbstractPersistentActorWithAtLeastOnceDelivery {
 
                 })
                 .match(CmdAck.class, f -> f.event instanceof Evt.FailedEvent, j -> {
-                    log.error("Failed to debtor {} due to {}", state, j.event);
+                    log.error("Failed for debtor {} due to {}", state, j.event);
                     persist(state.with(TransactionStatus.FAILED), a -> {
                         confirmDelivery(Long.valueOf(j.deliveryId));
                         if (initiator != null) {
@@ -112,19 +116,18 @@ class TransferHandler extends AbstractPersistentActorWithAtLeastOnceDelivery {
                         }
                         self().tell(PoisonPill.getInstance(), ActorRef.noSender());
                     });
-
-
                 })
                 .match(CmdAck.class, f -> f.event instanceof Evt.WithdrawEvent, j ->
                         persist(state.with(TransactionStatus.WITHDRAWN), g -> {
                             confirmDelivery(Long.valueOf(j.deliveryId));
+                            state = g;
                             getContext().become(creditor);
                             deliver(accountTo.path(), deliveryId -> new Cmd.DepositCmd(deliveryId.toString(), state.getTransactionId(), state.getAccountToId(), state.getAmount()));
                             if (initiator != null) {
                                 initiator.tell(new TransactionResult.Success(transactionId), self());
                             }
                         }))
-                .matchAny(f -> log.error("Unattended Message {}", f))
+                .matchAny(f -> log.error("Unattended Message {} at state {}", f, state))
                 .build();
 
     }
