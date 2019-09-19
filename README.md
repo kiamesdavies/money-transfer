@@ -170,15 +170,15 @@ Usage
 <tr>
 <th>Endpoint</th>
 <th>Description</th>
-<th>Body</th>
+<th>Body/Parameters</th>
 <th>Success Response</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 	<td><code>GET /account/{id}</code></td>
-	<td>Get the account balance of the specified if</td>
-	</td>
+	<td>Get the account balance of the specified</td>
+	<td> </td>
 	<td>
       <pre>
 {
