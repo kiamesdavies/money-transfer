@@ -2,35 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="2f313e3f-0b7d-4528-9d28-8a5e79172007" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dependency-reduced-pom.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/io/kiamesdavies/revolut/BigBang.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/io/kiamesdavies/revolut/BigBang.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/io/kiamesdavies/revolut/Bootstrap.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/io/kiamesdavies/revolut/Inflation.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/io/kiamesdavies/revolut/Test.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/io/kiamesdavies/revolut/account/Bank.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/io/kiamesdavies/revolut/account/Bank.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/io/kiamesdavies/revolut/account/BankAccount.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/io/kiamesdavies/revolut/account/BankAccount.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/io/kiamesdavies/revolut/account/UnavailableBankAccount.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/io/kiamesdavies/revolut/account/UnavailableBankAccount.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/io/kiamesdavies/revolut/commons/Utility.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/io/kiamesdavies/revolut/commons/Utility.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/io/kiamesdavies/revolut/controllers/AccountController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/io/kiamesdavies/revolut/controllers/AccountController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/io/kiamesdavies/revolut/exceptions/AccountNotFoundException.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/io/kiamesdavies/revolut/exceptions/AccountNotFoundException.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/io/kiamesdavies/revolut/exceptions/InsufficientFundsException.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/io/kiamesdavies/revolut/exceptions/InsufficientFundsException.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/io/kiamesdavies/revolut/models/AccountBalance.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/io/kiamesdavies/revolut/models/AccountBalance.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/io/kiamesdavies/revolut/models/Cmd.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/io/kiamesdavies/revolut/models/Cmd.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/io/kiamesdavies/revolut/models/CmdAck.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/io/kiamesdavies/revolut/models/CmdAck.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/io/kiamesdavies/revolut/models/Evt.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/io/kiamesdavies/revolut/models/Evt.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/io/kiamesdavies/revolut/models/Query.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/io/kiamesdavies/revolut/models/Query.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/io/kiamesdavies/revolut/models/QueryAck.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/io/kiamesdavies/revolut/models/QueryAck.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/io/kiamesdavies/revolut/models/TransactionStatus.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/io/kiamesdavies/revolut/models/TransactionStatus.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/io/kiamesdavies/revolut/services/impl/DefaultAccount.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/io/kiamesdavies/revolut/services/impl/DefaultAccount.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/io/kiamesdavies/revolut/services/impl/TransferHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/io/kiamesdavies/revolut/services/impl/TransferHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/application.conf" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application.conf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/commons.conf" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/commons.conf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/io/kiamesdavies/revolut/account/AccountTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/io/kiamesdavies/revolut/account/AccountTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/io/kiamesdavies/revolut/controllers/AccountControllerTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/io/kiamesdavies/revolut/controllers/AccountControllerTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/io/kiamesdavies/revolut/services/AccountTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/io/kiamesdavies/revolut/services/AccountTest.java" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <ignored path="$PROJECT_DIR$/target/" />
@@ -98,7 +70,7 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/test/resources/load_generation.properties">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="150">
@@ -107,11 +79,14 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/io/kiamesdavies/revolut/models/CmdAck.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="240">
-              <caret line="16" column="8" selection-start-line="16" selection-start-column="8" selection-end-line="16" selection-end-column="8" />
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/README.md">
+          <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
+            <state split_layout="SPLIT">
+              <first_editor relative-caret-position="364">
+                <caret line="199" column="9" selection-start-line="199" selection-start-column="9" selection-end-line="199" selection-end-column="9" />
+              </first_editor>
+              <second_editor />
             </state>
           </provider>
         </entry>
@@ -283,7 +258,6 @@
         <option value="$PROJECT_DIR$/src/main/java/io/kiamesdavies/revolut/models/Query.java" />
         <option value="$PROJECT_DIR$/src/main/java/io/kiamesdavies/revolut/services/impl/DefaultAccount.java" />
         <option value="$PROJECT_DIR$/src/test/java/io/kiamesdavies/revolut/account/AccountTest.java" />
-        <option value="$PROJECT_DIR$/README.md" />
         <option value="$PROJECT_DIR$/src/main/resources/application.conf" />
         <option value="$PROJECT_DIR$/src/main/java/io/kiamesdavies/revolut/BigBang.java" />
         <option value="$PROJECT_DIR$/src/main/java/io/kiamesdavies/revolut/Inflation.java" />
@@ -301,6 +275,7 @@
         <option value="$PROJECT_DIR$/src/main/java/io/kiamesdavies/revolut/models/CmdAck.java" />
         <option value="$PROJECT_DIR$/src/main/java/io/kiamesdavies/revolut/models/Evt.java" />
         <option value="$PROJECT_DIR$/src/main/java/io/kiamesdavies/revolut/services/impl/TransferHandler.java" />
+        <option value="$PROJECT_DIR$/README.md" />
       </list>
     </option>
   </component>
@@ -621,7 +596,7 @@
       <workItem from="1568836517871" duration="7796000" />
       <workItem from="1568849678369" duration="12087000" />
       <workItem from="1568884559455" duration="2755000" />
-      <workItem from="1568899930427" duration="1772000" />
+      <workItem from="1568899930427" duration="2269000" />
     </task>
     <servers />
   </component>
@@ -658,10 +633,11 @@
     </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="177433000" />
+    <option name="totallyTimeSpent" value="177930000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1440" height="900" extended-state="0" />
+    <editor active="true" />
     <layout>
       <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.21101573" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.24964234" />
@@ -2954,16 +2930,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/README.md">
-      <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
-        <state split_layout="SPLIT">
-          <first_editor relative-caret-position="302">
-            <caret line="189" column="5" lean-forward="true" selection-start-line="189" selection-start-column="5" selection-end-line="189" selection-end-column="5" />
-          </first_editor>
-          <second_editor />
-        </state>
-      </provider>
-    </entry>
     <entry file="jar://$MAVEN_REPOSITORY$/com/typesafe/akka/akka-persistence_2.12/2.5.25/akka-persistence_2.12-2.5.25-sources.jar!/akka/persistence/AtLeastOnceDelivery.scala">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="3090">
@@ -3217,6 +3183,16 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="150">
           <caret line="10" column="8" selection-start-line="10" selection-start-column="8" selection-end-line="10" selection-end-column="8" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/README.md">
+      <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
+        <state split_layout="SPLIT">
+          <first_editor relative-caret-position="364">
+            <caret line="199" column="9" selection-start-line="199" selection-start-column="9" selection-end-line="199" selection-end-column="9" />
+          </first_editor>
+          <second_editor />
         </state>
       </provider>
     </entry>

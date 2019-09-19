@@ -192,11 +192,13 @@ Usage
 	<td><code>POST /account/{bankAccountId}/tranfer/{receipientAccId}</code></td>
 	<td>Transfer amount from bankAccountId to receipientAccId</td>
 	<td>
+	<pre>
 	{
-     "amount": "double",
-     "remarks": "string optional",
-     "source":"string optional"
-    }
+         "amount": "double",
+         "remarks": "string optional",
+         "source":"string optional"
+        }
+	</pre>
 	</td>
 	<td>
       <pre>
