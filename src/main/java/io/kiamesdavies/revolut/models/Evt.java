@@ -28,7 +28,6 @@ public abstract class Evt implements Serializable {
             messageNanoTime = System.nanoTime();
         }
 
-
         public String getBankAccountId() {
             return bankAccountId;
         }
@@ -37,20 +36,20 @@ public abstract class Evt implements Serializable {
             this.bankAccountId = bankAccountId;
         }
 
-        public String getTransactionId() {
-            return transactionId;
-        }
-
-        public void setTransactionId(String transactionId) {
-            this.transactionId = transactionId;
-        }
-
         public BigDecimal getAmount() {
             return amount;
         }
 
         public void setAmount(BigDecimal amount) {
             this.amount = amount;
+        }
+
+        public String getTransactionId() {
+            return transactionId;
+        }
+
+        public void setTransactionId(String transactionId) {
+            this.transactionId = transactionId;
         }
 
         public long getMessageNanoTime() {
@@ -143,6 +142,7 @@ public abstract class Evt implements Serializable {
 
 
     public static final class TransactionEvent extends Evt {
+        private TransactionType transactionType;
         private String transactionId;
         private BigDecimal amount;
         private String remarks;
@@ -155,9 +155,10 @@ public abstract class Evt implements Serializable {
         public TransactionEvent() {
         }
 
-        public TransactionEvent(String transactionId, String accountFromId, String accountToId, BigDecimal amount, String remarks, String source, TransactionStatus status) {
+        public TransactionEvent(String transactionId, String accountFromId, String accountToId, BigDecimal amount,TransactionType transactionType, String remarks, String source, TransactionStatus status) {
             this.transactionId = transactionId;
             this.amount = amount;
+            this.transactionType= transactionType;
             this.remarks = remarks;
             this.source = source;
             this.accountToId = accountToId;
@@ -167,43 +168,77 @@ public abstract class Evt implements Serializable {
         }
 
         public TransactionEvent(String transactionId, Cmd.TransferCmd transferCmd, TransactionStatus status) {
-            this(transactionId, transferCmd.accountFromId, transferCmd.accountToId, transferCmd.amount, transferCmd.remarks, transferCmd.source, status);
+            this(transactionId, transferCmd.accountFromId, transferCmd.accountToId, transferCmd.amount, transferCmd.transactionType, transferCmd.remarks, transferCmd.source, status);
         }
 
 
         public TransactionEvent with(TransactionStatus transactionStatus) {
-            return new TransactionEvent(getTransactionId(), getAccountFromId(), getAccountToId(), getAmount(), getRemarks(), getSource(), transactionStatus);
+            return new TransactionEvent(getTransactionId(), getAccountFromId(), getAccountToId(), getAmount(),getTransactionType(), getRemarks(), getSource(), transactionStatus);
         }
 
 
+        public TransactionType getTransactionType() {
+            return transactionType;
+        }
 
+        public void setTransactionType(TransactionType transactionType) {
+            this.transactionType = transactionType;
+        }
 
         public String getTransactionId() {
             return transactionId;
+        }
+
+        public void setTransactionId(String transactionId) {
+            this.transactionId = transactionId;
         }
 
         public BigDecimal getAmount() {
             return amount;
         }
 
+        public void setAmount(BigDecimal amount) {
+            this.amount = amount;
+        }
+
         public String getRemarks() {
             return remarks;
+        }
+
+        public void setRemarks(String remarks) {
+            this.remarks = remarks;
         }
 
         public String getSource() {
             return source;
         }
 
+        public void setSource(String source) {
+            this.source = source;
+        }
+
         public String getAccountToId() {
             return accountToId;
+        }
+
+        public void setAccountToId(String accountToId) {
+            this.accountToId = accountToId;
         }
 
         public String getAccountFromId() {
             return accountFromId;
         }
 
+        public void setAccountFromId(String accountFromId) {
+            this.accountFromId = accountFromId;
+        }
+
         public TransactionStatus getStatus() {
             return status;
+        }
+
+        public void setStatus(TransactionStatus status) {
+            this.status = status;
         }
 
         public long getMessageNanoTime() {
@@ -213,7 +248,6 @@ public abstract class Evt implements Serializable {
         public void setMessageNanoTime(long messageNanoTime) {
             this.messageNanoTime = messageNanoTime;
         }
-
 
         @Override
         public String toString() {

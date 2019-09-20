@@ -23,7 +23,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 /**
  * Unit test for a single account
  */
-public class AccountTest {
+public class BankAccountTest {
     private static final String bankAccountId = "2";
     private static ActorSystem system;
     private static ActorRef bank;

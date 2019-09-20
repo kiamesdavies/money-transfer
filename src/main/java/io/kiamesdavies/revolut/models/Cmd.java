@@ -43,8 +43,10 @@ public abstract class Cmd implements Serializable {
         public final String source;
         public final String accountToId;
         public final String accountFromId;
+        public final TransactionType transactionType;
 
-        public TransferCmd(String accountFromId, String accountToId, BigDecimal amount, String remarks, String source) {
+        public TransferCmd(String accountFromId, String accountToId, BigDecimal amount, TransactionType transactionType, String remarks, String source) {
+            this.transactionType = transactionType;
             this.amount = amount;
             this.remarks = remarks;
             this.source = source;

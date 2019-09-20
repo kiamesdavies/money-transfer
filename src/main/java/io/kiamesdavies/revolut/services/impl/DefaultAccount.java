@@ -42,7 +42,7 @@ public class DefaultAccount implements Account {
 
         String transactionId = UUID.randomUUID().toString();
         ActorRef transferHandler = actorSystem.actorOf(TransferHandler.props(transactionId, bank), String.format("transaction-%s", transactionId));
-        return Patterns.ask(transferHandler, new Cmd.TransferCmd(accountFromId, accountToId, moneyTransfer.getAmount(), moneyTransfer.getRemarks(), moneyTransfer.getSource()), Duration.ofSeconds(60)).exceptionally(ex -> {
+        return Patterns.ask(transferHandler, new Cmd.TransferCmd(accountFromId, accountToId, moneyTransfer.getAmount(), TransactionType.TRANSFER, moneyTransfer.getRemarks(), moneyTransfer.getSource()), Duration.ofSeconds(60)).exceptionally(ex -> {
             log.error("Failed to transfer", ex);
             return new TransactionResult.Failure(ex);
         }).thenApply(g -> {
