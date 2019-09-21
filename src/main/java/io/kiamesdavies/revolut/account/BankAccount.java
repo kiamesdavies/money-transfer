@@ -76,11 +76,11 @@ public class BankAccount extends AbstractPersistentActorWithTimers {
 
 
     private void update(Evt.BaseAccountEvt evt) {
-        receivedCmds.put(evt.getTransactionId(), LocalDateTime.now());
+        receivedCmds.put(evt.transactionId, LocalDateTime.now());
         if (evt instanceof Evt.DepositEvent) {
-            AccountBalance.deposit(state, evt.getAmount());
+            AccountBalance.deposit(state, evt.amount);
         } else if (evt instanceof Evt.WithdrawEvent) {
-            AccountBalance.withdraw(state, evt.getAmount());
+            AccountBalance.withdraw(state, evt.amount);
         }
     }
 

@@ -1,9 +1,6 @@
 package io.kiamesdavies.revolut.services.impl;
 
-import akka.actor.AbstractActor;
-import akka.actor.ActorRef;
-import akka.actor.PoisonPill;
-import akka.actor.Props;
+import akka.actor.*;
 import akka.event.Logging;
 import akka.event.LoggingAdapter;
 import akka.pattern.BackoffOpts;
@@ -52,12 +49,12 @@ class TransferHandler extends AbstractPersistentActorWithAtLeastOnceDelivery {
      * Reference to the sender's account
      */
 
-    private ActorRef accountFrom;
+    private ActorPath accountFrom;
 
     /**
      * Reference to the receiver's account
      */
-    private ActorRef accountTo;
+    private ActorPath accountTo;
 
     public TransferHandler(String transactionId, ActorRef bank) {
         this.transactionId = transactionId;
@@ -76,7 +73,8 @@ class TransferHandler extends AbstractPersistentActorWithAtLeastOnceDelivery {
                     log.error("Rollback to account {} failed to respond after {} trials for {} will try again in 5 minutes ", accountTo, warnAfterNumberOfUnconfirmedAttempts(), state);
                     getContext().system().scheduler().scheduleOnce(
                             Duration.ofMinutes(5),
-                            () -> deliver(accountFrom.path(), deliveryId -> new Cmd.DepositCmd(deliveryId, transactionId + "-rollback", state.getAccountFromId(), state.getAmount())), getContext().getDispatcher());
+                            () -> deliver(accountFrom, deliveryId ->
+                                    new Cmd.DepositCmd(deliveryId, transactionId + "-rollback", state.accountFromId, state.amount)), getContext().getDispatcher());
                 })
                 .matchAny(f -> log.error("Unattended Message {} at state {}", f, state))
                 .build();
@@ -91,7 +89,8 @@ class TransferHandler extends AbstractPersistentActorWithAtLeastOnceDelivery {
                         getContext().become(rollback);
                         //the transactionId has been marked as worked on by the account so "-rollback" is attached to differentiate it
                         //note that the read side is required to remove the  "-rollback" text before saving it
-                        deliver(accountFrom.path(), deliveryId -> new Cmd.DepositCmd(deliveryId, transactionId + "-rollback", state.getAccountFromId(), state.getAmount()));
+                        deliver(accountFrom, deliveryId ->
+                                new Cmd.DepositCmd(deliveryId, transactionId + "-rollback", state.accountFromId, state.amount));
                     });
                 })
                 .match(CmdAck.class, f -> f.event instanceof Evt.FailedEvent, j -> {
@@ -103,7 +102,8 @@ class TransferHandler extends AbstractPersistentActorWithAtLeastOnceDelivery {
                         getContext().become(rollback);
                         //the transactionId has been flagged by the sender's account so "-rollback" is attached to differentiate it
                         //note that the read side is required to remove the  "-rollback" text before saving to its own store
-                        deliver(accountFrom.path(), deliveryId -> new Cmd.DepositCmd(deliveryId, transactionId + "-rollback", state.getAccountFromId(), state.getAmount()));
+                        deliver(accountFrom, deliveryId ->
+                                new Cmd.DepositCmd(deliveryId, transactionId + "-rollback", state.accountFromId, state.amount));
                     });
 
 
@@ -137,7 +137,7 @@ class TransferHandler extends AbstractPersistentActorWithAtLeastOnceDelivery {
                         if (initiator != null) {
                             Evt.FailedEvent failedEvent = (Evt.FailedEvent) j.event;
                             initiator.tell(
-                                    new TransactionResult.Failure(failedEvent.getType().equals(Evt.FailedEvent.Type.INSUFFICIENT_FUNDS) ? new InsufficientFundsException(failedEvent.getAdditionalDescription()) : new IllegalArgumentException(failedEvent.getAdditionalDescription())), self());
+                                    new TransactionResult.Failure(failedEvent.type.equals(Evt.FailedEvent.Type.INSUFFICIENT_FUNDS) ? new InsufficientFundsException(failedEvent.additionalDescription) : new IllegalArgumentException(failedEvent.additionalDescription)), self());
                         }
                         self().tell(PoisonPill.getInstance(), ActorRef.noSender());
                     });
@@ -147,7 +147,8 @@ class TransferHandler extends AbstractPersistentActorWithAtLeastOnceDelivery {
                             confirmDelivery(j.deliveryId);
                             state = g;
                             getContext().become(creditor);
-                            deliver(accountTo.path(), deliveryId -> new Cmd.DepositCmd(deliveryId, state.getTransactionId(), state.getAccountToId(), state.getAmount()));
+                            deliver(accountTo, deliveryId ->
+                                    new Cmd.DepositCmd(deliveryId, state.transactionId, state.accountToId, state.amount));
                             if (initiator != null) {
                                 initiator.tell(new TransactionResult.Success(transactionId), self());
                             }
@@ -183,21 +184,21 @@ class TransferHandler extends AbstractPersistentActorWithAtLeastOnceDelivery {
                 .match(QueryAck.class, d -> d.response instanceof Map, f -> {
                     confirmDelivery(f.deliveryId);
                     Map<String, Query.BankReference> response = (Map<String, Query.BankReference>) f.response;
-                    accountFrom = response.get(state.getAccountFromId()).bankAccount;
-                    accountTo = response.get(state.getAccountToId()).bankAccount;
-                    if (TransactionStatus.NEW.equals(state.getStatus())) {
+                    accountFrom = response.get(state.accountFromId).bankAccount.path();
+                    accountTo = response.get(state.accountToId).bankAccount.path();
+                    if (TransactionStatus.NEW.equals(state.status)) {
                         getContext().become(debtor);
-                        deliver(accountFrom.path(), deliveryId -> new Cmd.WithdrawCmd(deliveryId, state.getTransactionId(), state.getAccountFromId(), state.getAmount()));
-                    } else if (TransactionStatus.WITHDRAWN.equals(state.getStatus()) || TransactionStatus.DEPOSIT_FAILED.equals(state.getStatus())) {
+                        deliver(accountFrom, deliveryId -> new Cmd.WithdrawCmd(deliveryId, state.transactionId, state.accountFromId, state.amount));
+                    } else if (TransactionStatus.WITHDRAWN.equals(state.status) || TransactionStatus.DEPOSIT_FAILED.equals(state.status)) {
                         getContext().become(creditor);
-                        deliver(accountTo.path(), deliveryId -> new Cmd.DepositCmd(deliveryId, state.getTransactionId(), state.getAccountToId(), state.getAmount()));
+                        deliver(accountTo, deliveryId -> new Cmd.DepositCmd(deliveryId, state.transactionId, state.accountToId, state.amount));
                     } else {
                         log.warning("A completed transaction {} try to restart, am going to kill myself now", state);
                         self().tell(PoisonPill.getInstance(), ActorRef.noSender());
                     }
                 })
                 .match(QueryAck.class, d -> d.response instanceof Query.QueryAckNotFound, j -> {
-                    if (TransactionStatus.NEW.equals(state.getStatus())) {
+                    if (TransactionStatus.NEW.equals(state.status)) {
                         persist(state.with(TransactionStatus.FAILED), a -> {
                             confirmDelivery(j.deliveryId);
                             if (initiator != null) {
@@ -217,7 +218,7 @@ class TransferHandler extends AbstractPersistentActorWithAtLeastOnceDelivery {
                 })
                 .match(AtLeastOnceDelivery.UnconfirmedWarning.class, j -> {
                     log.error("Bank reference {} failed to respond after {} trials for {}", bank, warnAfterNumberOfUnconfirmedAttempts(), state);
-                    if (TransactionStatus.NEW.equals(state.getStatus())) {
+                    if (TransactionStatus.NEW.equals(state.status)) {
                         persist(state.with(TransactionStatus.FAILED), a -> {
                             j.getUnconfirmedDeliveries().forEach(g -> confirmDelivery(g.deliveryId()));
                             if (initiator != null) {
@@ -249,7 +250,9 @@ class TransferHandler extends AbstractPersistentActorWithAtLeastOnceDelivery {
     private void startTransfer(Evt.TransactionEvent transactionEvent, boolean checkForRecovery) {
         state = transactionEvent;
         //get bank references
-        Runnable run  = () ->  deliver(bank.path(), (deliveryId) -> new Query.Multiple(deliveryId, transactionEvent.getAccountFromId(), transactionEvent.getAccountToId()));
+        final Runnable run  = () ->
+                deliver(bank.path(), (deliveryId) ->
+                        new Query.Multiple(deliveryId, transactionEvent.accountFromId, transactionEvent.accountToId));
 
         if(!checkForRecovery){
             run.run();

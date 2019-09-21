@@ -67,8 +67,7 @@ Lets first go through an ideal scenario of a user transferring €100 from accou
 
 ### Ideal Scenario
 <img width="847" alt="ideal" src="https://user-images.githubusercontent.com/3046068/65287933-dc2d7c80-db3c-11e9-8257-81b2ca04a635.png">
-<br/>
-<br/>
+
 The image above pretty explains it all.
 
 **Note:** the server responds to the user that the transfer is complete while crediting the recipient is ongoing, this is to reduce waiting time by the user, and for situations that require accessing external resources like transferring to another bank, this is one of the proper ways to go. 

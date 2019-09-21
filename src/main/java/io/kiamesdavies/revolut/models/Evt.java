@@ -11,62 +11,20 @@ public abstract class Evt implements Serializable {
 
 
     public abstract static class BaseAccountEvt extends Evt {
-        private String bankAccountId;
-        private BigDecimal amount;
-        private String transactionId;
-        private long messageNanoTime;
-
-
-
-        BaseAccountEvt() {
-        }
+        public final String bankAccountId;
+        public final BigDecimal amount;
+        public final String transactionId;
+        public final long messageNanoTime;
 
         BaseAccountEvt(String bankAccountId, String transactionId, BigDecimal amount) {
-            this.setBankAccountId(bankAccountId);
-            this.transactionId = transactionId;
-            this.setAmount(amount);
-            messageNanoTime = System.nanoTime();
-        }
-
-        public String getBankAccountId() {
-            return bankAccountId;
-        }
-
-        public void setBankAccountId(String bankAccountId) {
             this.bankAccountId = bankAccountId;
-        }
-
-        public BigDecimal getAmount() {
-            return amount;
-        }
-
-        public void setAmount(BigDecimal amount) {
-            this.amount = amount;
-        }
-
-        public String getTransactionId() {
-            return transactionId;
-        }
-
-        public void setTransactionId(String transactionId) {
             this.transactionId = transactionId;
-        }
-
-        public long getMessageNanoTime() {
-            return messageNanoTime;
-        }
-
-        public void setMessageNanoTime(long messageNanoTime) {
-            this.messageNanoTime = messageNanoTime;
+            this.amount= amount;
+            messageNanoTime = System.nanoTime();
         }
     }
 
     public static final class DepositEvent extends BaseAccountEvt {
-
-        DepositEvent() {
-
-        }
-
         public DepositEvent(String bankAccountId, String transactionId, BigDecimal amount) {
 
             super(bankAccountId, transactionId, amount);
@@ -78,10 +36,6 @@ public abstract class Evt implements Serializable {
     }
 
     public static final class WithdrawEvent extends BaseAccountEvt {
-
-        WithdrawEvent() {
-
-        }
 
         public WithdrawEvent(String bankAccountId, String transactionId, BigDecimal amount) {
 
@@ -95,13 +49,9 @@ public abstract class Evt implements Serializable {
 
     public static final class FailedEvent extends Evt {
 
-
-        private String bankAccountId;
-        private Type type;
-        private String additionalDescription;
-
-        public FailedEvent() {
-        }
+        public String bankAccountId;
+        public Type type;
+        public String additionalDescription;
 
         public FailedEvent(String bankAccountId, Type type, String additionalDescription) {
             this.bankAccountId = bankAccountId;
@@ -113,17 +63,6 @@ public abstract class Evt implements Serializable {
             this(bankAccountId, type, null);
         }
 
-        public String getBankAccountId() {
-            return bankAccountId;
-        }
-
-        public Type getType() {
-            return type;
-        }
-
-        public String getAdditionalDescription() {
-            return additionalDescription;
-        }
 
         public enum Type {
             INSUFFICIENT_FUNDS,
@@ -133,27 +72,24 @@ public abstract class Evt implements Serializable {
         @Override
         public String toString() {
             return "FailedEvent{" +
-                    "bankAccountIds='" + getBankAccountId() + '\'' +
-                    ", type=" + getType() +
-                    ", additionalDescription='" + getAdditionalDescription() + '\'' +
+                    "bankAccountIds='" + bankAccountId + '\'' +
+                    ", type=" + type +
+                    ", additionalDescription='" + additionalDescription + '\'' +
                     '}';
         }
     }
 
 
     public static final class TransactionEvent extends Evt {
-        private TransactionType transactionType;
-        private String transactionId;
-        private BigDecimal amount;
-        private String remarks;
-        private String source;
-        private String accountToId;
-        private String accountFromId;
-        private TransactionStatus status;
-        private long messageNanoTime;
-
-        public TransactionEvent() {
-        }
+        public final TransactionType transactionType;
+        public final String transactionId;
+        public final BigDecimal amount;
+        public final String remarks;
+        public final String source;
+        public final String accountToId;
+        public final String accountFromId;
+        public final TransactionStatus status;
+        public final long messageNanoTime;
 
         public TransactionEvent(String transactionId, String accountFromId, String accountToId, BigDecimal amount,TransactionType transactionType, String remarks, String source, TransactionStatus status) {
             this.transactionId = transactionId;
@@ -173,7 +109,7 @@ public abstract class Evt implements Serializable {
 
 
         public TransactionEvent with(TransactionStatus transactionStatus) {
-            return new TransactionEvent(getTransactionId(), getAccountFromId(), getAccountToId(), getAmount(),getTransactionType(), getRemarks(), getSource(), transactionStatus);
+            return new TransactionEvent(transactionId, accountFromId, accountToId, amount,transactionType,remarks, source, transactionStatus);
         }
 
 
@@ -181,84 +117,18 @@ public abstract class Evt implements Serializable {
             return transactionType;
         }
 
-        public void setTransactionType(TransactionType transactionType) {
-            this.transactionType = transactionType;
-        }
 
-        public String getTransactionId() {
-            return transactionId;
-        }
-
-        public void setTransactionId(String transactionId) {
-            this.transactionId = transactionId;
-        }
-
-        public BigDecimal getAmount() {
-            return amount;
-        }
-
-        public void setAmount(BigDecimal amount) {
-            this.amount = amount;
-        }
-
-        public String getRemarks() {
-            return remarks;
-        }
-
-        public void setRemarks(String remarks) {
-            this.remarks = remarks;
-        }
-
-        public String getSource() {
-            return source;
-        }
-
-        public void setSource(String source) {
-            this.source = source;
-        }
-
-        public String getAccountToId() {
-            return accountToId;
-        }
-
-        public void setAccountToId(String accountToId) {
-            this.accountToId = accountToId;
-        }
-
-        public String getAccountFromId() {
-            return accountFromId;
-        }
-
-        public void setAccountFromId(String accountFromId) {
-            this.accountFromId = accountFromId;
-        }
-
-        public TransactionStatus getStatus() {
-            return status;
-        }
-
-        public void setStatus(TransactionStatus status) {
-            this.status = status;
-        }
-
-        public long getMessageNanoTime() {
-            return messageNanoTime;
-        }
-
-        public void setMessageNanoTime(long messageNanoTime) {
-            this.messageNanoTime = messageNanoTime;
-        }
 
         @Override
         public String toString() {
             return "TransactionEvent{" +
-                    "transactionId='" + getTransactionId() + '\'' +
-                    ", amount=" + getAmount() +
-                    ", remarks='" + getRemarks() + '\'' +
-                    ", source='" + getSource() + '\'' +
-                    ", accountToId='" + getAccountToId() + '\'' +
-                    ", accountFromId='" + getAccountFromId() + '\'' +
-                    ", status=" + getStatus() +
+                    "transactionId='" + transactionId + '\'' +
+                    ", amount=" + amount +
+                    ", remarks='" + remarks + '\'' +
+                    ", source='" + source + '\'' +
+                    ", accountToId='" + accountToId + '\'' +
+                    ", accountFromId='" + accountFromId + '\'' +
+                    ", status=" + status +
                     '}';
         }
     }

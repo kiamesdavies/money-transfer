@@ -76,7 +76,7 @@ public class BankAccountTest {
         sampleBankAccount.tell(new Cmd.WithdrawCmd(RANDOM.nextLong(), UUID.randomUUID().toString(), bankAccountId, accountBalance.getBalance().add(BigDecimal.ONE)), testProbe.getRef());
         CmdAck cmdAck = testProbe.expectMsgClass(CmdAck.class);
         assertThat(cmdAck.event, instanceOf(Evt.FailedEvent.class));
-        assertThat(((Evt.FailedEvent) cmdAck.event).getType(), equalTo(Evt.FailedEvent.Type.INSUFFICIENT_FUNDS));
+        assertThat(((Evt.FailedEvent) cmdAck.event).type, equalTo(Evt.FailedEvent.Type.INSUFFICIENT_FUNDS));
     }
 
     @Test
@@ -99,7 +99,7 @@ public class BankAccountTest {
         sampleBankAccount.tell(new Cmd.DepositCmd(RANDOM.nextLong(), UUID.randomUUID().toString(), bankAccountId, BigDecimal.ZERO), testProbe.getRef());
         CmdAck cmdAck = testProbe.expectMsgClass(CmdAck.class);
         assertThat(cmdAck.event, instanceOf(Evt.FailedEvent.class));
-        assertThat(((Evt.FailedEvent) cmdAck.event).getType(), equalTo(Evt.FailedEvent.Type.INVALID_AMOUNT));
+        assertThat(((Evt.FailedEvent) cmdAck.event).type, equalTo(Evt.FailedEvent.Type.INVALID_AMOUNT));
     }
 
     @Test
