@@ -24,7 +24,7 @@ import static io.kiamesdavies.revolut.models.Evt.FailedEvent.Type.INVALID_AMOUNT
 /**
  * Represents a single user bank account.
  */
-public class BankAccount extends AbstractPersistentActorWithTimers {
+public final  class BankAccount extends AbstractPersistentActorWithTimers {
 
     private final LoggingAdapter log = Logging.getLogger(getContext().getSystem(), this);
 
@@ -91,7 +91,7 @@ public class BankAccount extends AbstractPersistentActorWithTimers {
             sender().tell(CmdAck.from(c, evt), self());
         } else {
             persist(evt,
-                    (Evt.BaseAccountEvt e) -> {
+                    e -> {
                         this.update(e);
                         sender().tell(CmdAck.from(c, e), self());
                         if (lastSequenceNr() % snapShotInterval == 0 && lastSequenceNr() != 0) {

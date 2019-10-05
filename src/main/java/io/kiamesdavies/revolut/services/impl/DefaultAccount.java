@@ -32,7 +32,7 @@ public class DefaultAccount implements Account {
      * Transfer money between two accounts
      *
      * @param accountFromId sender's account
-     * @param accountToId   recipient's accouny
+     * @param accountToId   recipient's account
      * @param moneyTransfer containing amount to transfer
      * @return Returns {@link TransactionResult.Success} if transfer was successful
      * otherwise returns  {@link TransactionResult.Failure}
@@ -49,7 +49,7 @@ public class DefaultAccount implements Account {
             if (g instanceof TransactionResult) {
                 return (TransactionResult) g;
             }
-            log.error("Unknown type {}", g);
+            log.error("Unknown type {} while transferring money {} from {} to {}", g, moneyTransfer, accountFromId, accountToId);
             return new TransactionResult.Failure(new IllegalStateException(String.format("Unknown type %s", Objects.toString(g))));
         });
 

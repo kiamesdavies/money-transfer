@@ -11,7 +11,7 @@
       "assertions": {
         "status": 200,
         "body": {
-          "balance": "$EQ.16000"
+          "balance": "$EQ.10000"
         }
       }
     },
@@ -24,7 +24,7 @@
       "assertions": {
         "status": 200,
         "body": {
-          "balance": "$EQ.4000"
+          "balance": "$EQ.10000"
         }
       }
     }

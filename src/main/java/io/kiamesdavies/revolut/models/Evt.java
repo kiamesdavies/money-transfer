@@ -33,6 +33,16 @@ public abstract class Evt implements Serializable {
         public DepositEvent(Cmd.DepositCmd depositCmd) {
             this(depositCmd.bankAccountId, depositCmd.transactionId, depositCmd.amount);
         }
+
+        @Override
+        public String toString() {
+            return "DepositEvent{" +
+                    "bankAccountId='" + bankAccountId + '\'' +
+                    ", amount=" + amount +
+                    ", transactionId='" + transactionId + '\'' +
+                    ", messageNanoTime=" + messageNanoTime +
+                    '}';
+        }
     }
 
     public static final class WithdrawEvent extends BaseAccountEvt {
@@ -49,9 +59,9 @@ public abstract class Evt implements Serializable {
 
     public static final class FailedEvent extends Evt {
 
-        public String bankAccountId;
-        public Type type;
-        public String additionalDescription;
+        public final String bankAccountId;
+        public final Type type;
+        public final String additionalDescription;
 
         public FailedEvent(String bankAccountId, Type type, String additionalDescription) {
             this.bankAccountId = bankAccountId;
@@ -111,13 +121,6 @@ public abstract class Evt implements Serializable {
         public TransactionEvent with(TransactionStatus transactionStatus) {
             return new TransactionEvent(transactionId, accountFromId, accountToId, amount,transactionType,remarks, source, transactionStatus);
         }
-
-
-        public TransactionType getTransactionType() {
-            return transactionType;
-        }
-
-
 
         @Override
         public String toString() {

@@ -11,17 +11,12 @@ import java.util.concurrent.ExecutionException;
 public class BigBang extends HttpApp {
 
 
-    private final Inflation instance;
-
-    public BigBang() {
-        instance = Inflation.getInstance();
-    }
+    private final Inflation instance = Inflation.getInstance();
 
     public static void main(String[] args) throws ExecutionException, InterruptedException {
         BigBang bigBang = new BigBang();
-
         bigBang.startServer("0.0.0.0",
-                bigBang.instance.getActorSystem().settings().config().getInt("http.port"),
+                bigBang.instance.getActorSystem().settings().config().getInt("server.port"),
                 bigBang.instance.getActorSystem());
     }
 

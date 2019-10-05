@@ -15,7 +15,7 @@ public enum TransactionType {
     DEPOSIT,
 
     /**
-     * Indicates that this is a withdrawal type, like withdrawing in an ATM
+     * Indicates that this is a withdrawal type, like withdrawing from an ATM
      */
     WITHDRAWAL
 }

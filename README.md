@@ -249,6 +249,7 @@ Thread count peek at 50
 
 Final Thoughts
 ===
+Give Credit command an higher priority and use priority mail box
 
 The read side of this application was not written and can easily be implemented using `Akka Persistence Query`, okay maybe I should have said CRS and not CQRS :laughing: 
 <br/>

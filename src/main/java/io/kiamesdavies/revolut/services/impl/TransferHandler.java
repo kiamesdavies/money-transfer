@@ -48,7 +48,6 @@ class TransferHandler extends AbstractPersistentActorWithAtLeastOnceDelivery {
     /**
      * Reference to the sender's account
      */
-
     private ActorPath accountFrom;
 
     /**

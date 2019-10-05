@@ -6,7 +6,7 @@ import akka.actor.Props;
 /**
  * A no action bank account
  */
-public class UnavailableBankAccount extends AbstractLoggingActor {
+public final class UnavailableBankAccount extends AbstractLoggingActor {
     public static Props props() {
         return Props.create(UnavailableBankAccount.class);
     }

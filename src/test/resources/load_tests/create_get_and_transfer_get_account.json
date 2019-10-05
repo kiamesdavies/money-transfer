@@ -1,32 +1,7 @@
 {
   "scenarioName": "Transfer Core API Test",
   "steps": [
-    {
-      "name": "get_initial_account_balance_for_5",
-      "url": "/account/5",
-      "operation": "GET",
-      "request": {
-      },
-      "assertions": {
-        "status": 200,
-        "body": {
-          "balance": "$NOT.NULL"
-        }
-      }
-    },
-    {
-      "name": "get_initial_account_balance_for_4",
-      "url": "/account/4/",
-      "operation": "GET",
-      "request": {
-      },
-      "assertions": {
-        "status": 200,
-        "body": {
-          "balance": "$NOT.NULL"
-        }
-      }
-    },
+
     {
       "name": "transfer_from_4_to_5",
       "url": "/account/4/transfer/5",
@@ -44,30 +19,22 @@
       }
     },
     {
-      "name": "get_final_account_balance_for_5",
-      "url": "/account/5",
-      "operation": "GET",
+      "name": "transfer_from_4_to_5",
+      "url": "/account/5/transfer/4",
+      "operation": "POST",
       "request": {
-      },
-      "assertions": {
-        "status": 200,
         "body": {
-          "balance": "$GT.${$.get_initial_account_balance_for_5.response.body.balance}"
+          "amount": 10
         }
-      }
-    },
-    {
-      "name": "get_final_account_balance_for_4",
-      "url": "/account/4/",
-      "operation": "GET",
-      "request": {
       },
       "assertions": {
         "status": 200,
         "body": {
-          "balance": "$LT.${$.get_initial_account_balance_for_4.response.body.balance}"
+          "transactionId": "$NOT.NULL"
         }
       }
     }
+
+
   ]
 }

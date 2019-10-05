@@ -76,7 +76,6 @@ public final class Inflation {
         return getOurInstance();
     }
 
-
     /**
      * Shutdown actor system and set the instance to null
      * @return

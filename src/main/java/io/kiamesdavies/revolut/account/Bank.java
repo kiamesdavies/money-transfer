@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 /**
  * This is responsible for managing the bank accounts in the application.
  */
-public class Bank extends AbstractLoggingActor {
+public final class Bank extends AbstractLoggingActor {
 
 
     private final Map<String, ActorRef> bankAccounts;
