@@ -1,4 +1,4 @@
-## Revolut Money Transfer API with Event Sourcing and CQRS
+## Money Transfer API with Event Sourcing and CQRS
 
 This project facilitates the transfer of money between two accounts.
 
@@ -31,7 +31,7 @@ The purpose of this project is to build a high-quality money transfer API. This 
 Since the primary aim of this system is to demo a money transfer API, the following assumptions/decisions were made
 
 + A default currency of euros is used, so no currency conversion or any other currency feature were built into the system.
-+ No provision for creating bank accounts, so five bank accounts (with ids `1, 2, 3, 4, 5`) are created by default each with a balance of *10,000*. In this universe, that's your opening balance with Revolut. :smile:
++ No provision for creating bank accounts, so five bank accounts (with ids `1, 2, 3, 4, 5`) are created by default each with a balance of *10,000*. In this universe, that's your opening balance with a bank. :smile:
 + Another bank account with an id of `10` was created as well, to demonstrate rollback and unavailability. You can transfer to this account to see how rollback works.
 
 Why Event Sourcing and CQRS
