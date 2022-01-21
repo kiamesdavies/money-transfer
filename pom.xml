@@ -15,7 +15,7 @@
         <akka.version>2.5.25</akka.version>
         <akka.http.version>10.1.9</akka.http.version>
         <fst.version>2.56</fst.version>
-        <h2.version>2.0.206</h2.version>
+        <h2.version>2.1.210</h2.version>
         <junit.jupiter.version>5.5.0</junit.jupiter.version>
         <junit.platform.version>1.0.0</junit.platform.version>
     </properties>
